@@ -1,24 +1,40 @@
 package com.dataproject.yorha.DTO;
 
-import com.dataproject.yorha.model.Type;
-import com.dataproject.yorha.repository.TypeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 
-public class TypeDTO {
+import java.io.Serializable;
 
-    @Autowired
-    private TypeRepository typeRepository;
+public class TypeDTO implements Serializable {
 
-    public Type stringToType(String typeName){
-        List<Type> typeList = typeRepository.findAll();
-        for ( Type type : typeList ){
-            if(type.getName().equals(typeName)){
-                return type;
-            }
-        }
+    private String name;
 
-        return null;
+    private String resume;
+
+    private String desc;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getResume() {
+        return resume;
+    }
+
+    public void setResume(String resume) {
+        this.resume = resume;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 }

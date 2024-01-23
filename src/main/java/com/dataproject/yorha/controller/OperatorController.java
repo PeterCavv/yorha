@@ -1,6 +1,6 @@
 package com.dataproject.yorha.controller;
 
-import com.dataproject.yorha.model.Operator;
+import com.dataproject.yorha.entity.Operator;
 import com.dataproject.yorha.service.OperatorService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/operators")
+@RequestMapping("/operators")
 public class OperatorController {
     @Autowired
     private OperatorService operatorService;

@@ -1,6 +1,6 @@
 package com.dataproject.yorha.service;
 
-import com.dataproject.yorha.model.Report;
+import com.dataproject.yorha.entity.Report;
 import com.dataproject.yorha.repository.ReportRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;

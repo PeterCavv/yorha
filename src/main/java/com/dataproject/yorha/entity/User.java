@@ -1,4 +1,4 @@
-package com.dataproject.yorha.model;
+package com.dataproject.yorha.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,18 +7,19 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "reports")
+@Document(collection = "users")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Report {
+public class User {
 
     @Id
     private ObjectId id;
 
-    private String name;
+    private String user_name;
 
-    private String content;
+    private String password;
 
-    private Android android;
+    //@DBRef
+    //private String roles;
 }

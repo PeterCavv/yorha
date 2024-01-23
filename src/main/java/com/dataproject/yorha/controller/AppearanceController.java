@@ -1,6 +1,6 @@
 package com.dataproject.yorha.controller;
 
-import com.dataproject.yorha.model.Appearance;
+import com.dataproject.yorha.entity.Appearance;
 import com.dataproject.yorha.service.AppearanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/appearances")
+@RequestMapping("/appearances")
 public class AppearanceController {
     @Autowired
     private AppearanceService appearanceService;

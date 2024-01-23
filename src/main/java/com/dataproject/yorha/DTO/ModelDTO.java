@@ -1,6 +1,6 @@
 package com.dataproject.yorha.DTO;
 
-import com.dataproject.yorha.model.Model;
+import com.dataproject.yorha.entity.Model;
 import com.dataproject.yorha.repository.ModelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 

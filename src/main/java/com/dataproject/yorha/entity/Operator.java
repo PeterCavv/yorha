@@ -1,30 +1,30 @@
-package com.dataproject.yorha.model;
+package com.dataproject.yorha.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "types")
+import java.util.List;
+@Document(collection = "operators")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Type {
+public class Operator {
+
     @Id
     private ObjectId id;
 
-    private String name;
+    @DBRef(lazy = true)
+    private Android name;
 
-    private String resume;
+    @DBRef(lazy = true)
+    private List<Android> androids;
 
-    private String desc;
-
-    public Type(String name, String resume, String desc){
+    public Operator(Android name) {
         this.name = name;
-        this.resume = resume;
-        this.desc = desc;
     }
 }

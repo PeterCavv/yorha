@@ -1,7 +1,7 @@
 package com.dataproject.yorha.service;
 
 import com.dataproject.yorha.DTO.AndroidDTO;
-import com.dataproject.yorha.model.*;
+import com.dataproject.yorha.entity.*;
 import com.dataproject.yorha.repository.*;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,25 +43,19 @@ public class AndroidService extends AndroidDTO{
         return androidRepository.findById(id);
     }
 
-    public Android createAndroid(Android android){
+    public Android createAndroid(AndroidDTO androidDTO){
 
-        //Appearance newAppearance = stringToAppearance(appearance);
-        //Model newModel = stringToModel(model);
-        //State newState = stringToState(state);
-        //Type newType = stringToType(type);
+        Android android = new Android();
+        android.setName(androidDTO.getName());
+        android.setShort_name(androidDTO.getShort_name());
+        android.setDesc(android.getDesc());
+        android.setModel(android.getModel());
+        android.setType(android.getType());
+        android.setType_number(android.getType_number());
+        android.setState(android.getState());
+        android.setAppearance(android.getAppearance());
 
-        //int typeNumberInt = Integer.parseInt(typeNumber);
-
-        //Android android = new Android(name, shortName, newModel, newType, typeNumberInt, newAppearance, newState, desc);
-
-        androidRepository.insert(android);
-
-        if(android.getType().getName().equals("Operator")){
-            Operator operator = new Operator(android);
-            operatorService.createOperator(operator);
-        }
-
-        return android;
+        return androidRepository.save(android);
     }
 
 }
