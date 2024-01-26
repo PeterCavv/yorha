@@ -1,5 +1,7 @@
 package com.dataproject.yorha.entity;
 
+import com.mongodb.lang.NonNull;
+import com.mongodb.lang.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

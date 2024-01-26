@@ -1,11 +1,8 @@
 package com.dataproject.yorha.DTO;
 
-import com.dataproject.yorha.entity.Appearance;
-import com.dataproject.yorha.entity.Model;
-import com.dataproject.yorha.entity.State;
-import com.dataproject.yorha.entity.Type;
 import lombok.Getter;
 import lombok.Setter;
+import org.bson.types.ObjectId;
 
 import java.io.Serializable;
 
@@ -17,15 +14,15 @@ public class AndroidDTO implements Serializable {
 
     private String short_name;
 
-    private Model model;
+    private ObjectId modelId;
 
-    private Type type;
+    private ObjectId typeId;
 
     private int type_number;
 
-    private Appearance appearance;
+    private ObjectId appearanceId;
 
-    private State state;
+    private ObjectId stateId;
 
     private String desc;
 

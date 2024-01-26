@@ -31,7 +31,7 @@ public class TypeController {
 
     @PostMapping
     public ResponseEntity<Type> postType(@RequestBody @Validated TypeDTO typeDTO) {
-        Type type = typeService.save(typeDTO);
+        Type type = typeService.createType(typeDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(type );
     }
 

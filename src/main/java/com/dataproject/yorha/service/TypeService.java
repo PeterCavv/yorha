@@ -23,7 +23,7 @@ public class TypeService {
         return typeRepository.findById(id);
     }
 
-    public Type save(TypeDTO typeDTO){
+    public Type createType(TypeDTO typeDTO){
         Type type = new Type();
         type.setName(typeDTO.getName());
         type.setDesc(typeDTO.getDesc());
