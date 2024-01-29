@@ -1,15 +1,14 @@
 package com.dataproject.yorha.entity;
 
-import com.mongodb.lang.NonNull;
-import com.mongodb.lang.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 @Document(collection = "androids")
 @AllArgsConstructor
@@ -18,7 +17,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Android {
 
     @Id
-    private ObjectId id;
+    @MongoId(FieldType.OBJECT_ID)
+    private String id;
 
     @Indexed(unique = true)
     private String name;

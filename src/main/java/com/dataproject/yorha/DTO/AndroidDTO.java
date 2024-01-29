@@ -3,6 +3,8 @@ package com.dataproject.yorha.DTO;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.io.Serializable;
 
@@ -12,17 +14,15 @@ public class AndroidDTO implements Serializable {
 
     private String name;
 
-    private String short_name;
+    private String modelId;
 
-    private ObjectId modelId;
-
-    private ObjectId typeId;
+    private String typeId;
 
     private int type_number;
 
-    private ObjectId appearanceId;
+    private String appearanceId;
 
-    private ObjectId stateId;
+    private String stateId;
 
     private String desc;
 
