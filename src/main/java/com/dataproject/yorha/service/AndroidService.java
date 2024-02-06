@@ -1,27 +1,28 @@
 package com.dataproject.yorha.service;
 
 import com.dataproject.yorha.DTO.AndroidDTO;
-import com.dataproject.yorha.model.*;
+import com.dataproject.yorha.entity.*;
+import com.dataproject.yorha.exception.ObjectNotFoundException;
 import com.dataproject.yorha.repository.*;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.BooleanOperators;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AndroidService extends AndroidDTO{
 
     @Autowired
-    private AndroidRepository androidRepository;
-
-    @Autowired
-    private AppearanceRepository appearanceRepository;
-
-    @Autowired
     private ModelRepository modelRepository;
+
+    @Autowired
+    private AndroidRepository androidRepository;
 
     @Autowired
     private StateRepository stateRepository;
@@ -32,9 +33,6 @@ public class AndroidService extends AndroidDTO{
     @Autowired
     private OperatorService operatorService;
 
-    @Autowired
-    private MongoTemplate mongoTemplate;
-
     public List<Android> allAndroids() {
         return androidRepository.findAll();
     }
@@ -43,25 +41,53 @@ public class AndroidService extends AndroidDTO{
         return androidRepository.findById(id);
     }
 
-    public Android createAndroid(Android android){
+    /**
+     * Se crea un Android mediante un objeto JSON obtenido por una petición http POST
+     * @param androidDTO Objeto obtenido desde la petición
+     * @return
+     */
+    public Android createAndroid(AndroidDTO androidDTO){
 
-        //Appearance newAppearance = stringToAppearance(appearance);
-        //Model newModel = stringToModel(model);
-        //State newState = stringToState(state);
-        //Type newType = stringToType(type);
+        Android android = new Android();
+        android.setDesc(androidDTO.getDesc().isEmpty() ? "" : androidDTO.getDesc());
+        android.setType_number(androidDTO.getType_number());
 
-        //int typeNumberInt = Integer.parseInt(typeNumber);
-
-        //Android android = new Android(name, shortName, newModel, newType, typeNumberInt, newAppearance, newState, desc);
-
-        androidRepository.insert(android);
-
-        if(android.getType().getName().equals("Operator")){
-            Operator operator = new Operator(android);
-            operatorService.createOperator(operator);
+        Model model = new Model();
+        try {
+            model = modelRepository.findAll().stream().filter(modelR -> modelR.getId()
+                    .equals(androidDTO.getModelId())).toList().get(0);
+            android.setModel(model);
+        } catch (IndexOutOfBoundsException obj) {
+            throw new RuntimeException("Model not found with ID: " + androidDTO.getModelId());
         }
 
-        return android;
+        Type type = new Type();
+        try {
+            type = typeRepository.findAll().stream().filter(typeR -> typeR.getId()
+                    .equals(androidDTO.getTypeId())).toList().get(0);
+            android.setType(type);
+        } catch (IndexOutOfBoundsException obj) {
+            throw new RuntimeException("Type not found with ID: " + androidDTO.getTypeId());
+        }
+
+        Appearance appearance = new Appearance();
+        appearance.setId(androidDTO.getAppearanceId());
+        android.setAppearance(appearance);
+
+        //Si el modelo del androide es YoRHa, se creará su nombre en valor a sus parámetros.
+        //En caso contrario, debería haberse obtenido su nombre en el front.
+        if(android.getModel().getName().equals("YoRHa")) {
+            android.setName(android.getModel().getName() + " No. " + android.getType_number()
+                    + " Type " + android.getType().getName().charAt(0));
+            android.setShort_name(String.valueOf(android.getType_number()) + android.getType().getName().charAt(0));
+        } else {
+            android.setName(androidDTO.getName());
+        }
+
+        android.setState(stateRepository.findAll().stream().filter(state -> state.getName()
+                .equals("Operational")).toList().get(0));
+
+        return androidRepository.save(android);
     }
 
 }

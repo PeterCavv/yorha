@@ -1,14 +1,12 @@
-package com.dataproject.yorha.model;
+package com.dataproject.yorha.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.List;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 @Document(collection = "users")
 @Data
@@ -17,7 +15,8 @@ import java.util.List;
 public class User {
 
     @Id
-    private ObjectId id;
+    @MongoId(FieldType.OBJECT_ID)
+    private String id;
 
     private String user_name;
 

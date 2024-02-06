@@ -1,6 +1,6 @@
 package com.dataproject.yorha.DTO;
 
-import com.dataproject.yorha.model.Appearance;
+import com.dataproject.yorha.entity.Appearance;
 import com.dataproject.yorha.repository.AppearanceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 

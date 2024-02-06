@@ -1,72 +1,29 @@
 package com.dataproject.yorha.DTO;
 
-import com.dataproject.yorha.model.Appearance;
-import com.dataproject.yorha.model.Model;
-import com.dataproject.yorha.model.State;
-import com.dataproject.yorha.model.Type;
-import com.dataproject.yorha.repository.AppearanceRepository;
-import com.dataproject.yorha.repository.ModelRepository;
-import com.dataproject.yorha.repository.StateRepository;
-import com.dataproject.yorha.repository.TypeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.Getter;
+import lombok.Setter;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
-import java.util.List;
+import java.io.Serializable;
 
-public class AndroidDTO {
+@Getter
+@Setter
+public class AndroidDTO implements Serializable {
 
-    @Autowired
-    private AppearanceRepository appearanceRepository;
+    private String name;
 
-    @Autowired
-    private ModelRepository modelRepository;
+    private String modelId;
 
-    @Autowired
-    private StateRepository stateRepository;
+    private String typeId;
 
-    @Autowired
-    private TypeRepository typeRepository;
+    private int type_number;
 
-    public Appearance stringToAppearance(String appearanceName){
-        List<Appearance> appearanceList = appearanceRepository.findAll();
-        for ( Appearance appearance : appearanceList ){
-            if(appearance.getName().equals(appearanceName)){
-                return appearance;
-            }
-        }
+    private String appearanceId;
 
-        return null;
-    }
+    private String stateId;
 
-    public Model stringToModel(String modelName){
-        List<Model> modelList = modelRepository.findAll();
-        for ( Model model : modelList) {
-            if(model.getName().equals(modelName)){
-                return model;
-            }
-        }
+    private String desc;
 
-        return null;
-    }
-
-    public State stringToState(String stateName){
-        List<State> stateList = stateRepository.findAll();
-        for ( State state : stateList ) {
-            if(state.getName().equals(stateName)){
-                return state;
-            }
-        }
-
-        return null;
-    }
-
-    public Type stringToType(String typeName){
-        List<Type> typeList = typeRepository.findAll();
-        for ( Type type : typeList ){
-            if(type.getName().equals(typeName)){
-                return type;
-            }
-        }
-
-        return null;
-    }
 }

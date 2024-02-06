@@ -1,6 +1,6 @@
 package com.dataproject.yorha.service;
 
-import com.dataproject.yorha.model.User;
+import com.dataproject.yorha.entity.User;
 import com.dataproject.yorha.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

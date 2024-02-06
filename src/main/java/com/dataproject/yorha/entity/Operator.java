@@ -1,15 +1,16 @@
-package com.dataproject.yorha.model;
+package com.dataproject.yorha.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.util.List;
-
 @Document(collection = "operators")
 @Data
 @AllArgsConstructor
@@ -17,12 +18,14 @@ import java.util.List;
 public class Operator {
 
     @Id
-    private ObjectId id;
+    @MongoId(FieldType.OBJECT_ID)
+    private String id;
 
-    @DBRef
+    @DBRef(lazy = true)
+    @Indexed(unique = true)
     private Android name;
 
-    @DBRef
+    @DBRef(lazy = true)
     private List<Android> androids;
 
     public Operator(Android name) {

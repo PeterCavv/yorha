@@ -1,41 +1,42 @@
-package com.dataproject.yorha.model;
+package com.dataproject.yorha.entity;
 
-import com.mongodb.lang.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.List;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 @Document(collection = "androids")
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class Android {
 
     @Id
-    private ObjectId id;
+    @MongoId(FieldType.OBJECT_ID)
+    private String id;
 
+    @Indexed(unique = true)
     private String name;
 
     private String short_name;
 
-    @DBRef
+    @DBRef(lazy = true)
     private Model model;
 
-    @DBRef
+    @DBRef(lazy = true)
     private Type type;
 
     private int type_number;
 
-    @DBRef
+    @DBRef(lazy = true)
     private Appearance appearance;
 
-    @DBRef
+    @DBRef(lazy = true)
     private State state;
 
     private String desc;
@@ -53,4 +54,5 @@ public class Android {
         this.state = state;
         this.desc = desc;
     }
+
 }

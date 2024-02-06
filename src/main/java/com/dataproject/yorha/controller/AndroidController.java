@@ -1,20 +1,27 @@
 package com.dataproject.yorha.controller;
 
-import com.dataproject.yorha.model.*;
+import com.dataproject.yorha.DTO.AndroidDTO;
+import com.dataproject.yorha.entity.*;
 import com.dataproject.yorha.service.AndroidService;
+import com.dataproject.yorha.service.TypeService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/api/v1/androids", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/androids", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AndroidController {
+
+    @Autowired
+    private TypeService typeService;
 
     @Autowired
     private AndroidService androidService;
@@ -25,14 +32,20 @@ public class AndroidController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Android>> getOneAndroide(@PathVariable ObjectId id){
-        return new ResponseEntity<Optional<Android>>(androidService.oneAndroid(id), HttpStatus.OK);
+    public ResponseEntity<Android> getOneAndroide(@PathVariable ObjectId id){
+        Optional<Android> android = androidService.oneAndroid(id);
+
+        if(android.isPresent()){
+            return ResponseEntity.ok(android.get());
+        }
+        return ResponseEntity.notFound().build();
     }
 
-    @PostMapping(value = "/create/", consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Android> createOneAndroid(@RequestBody Android android)
+    @PostMapping
+    public ResponseEntity<Android> createOneAndroid(@RequestBody @Validated AndroidDTO androidDTO)
     {
-        return new ResponseEntity<Android>(androidService.createAndroid(android), HttpStatus.OK);
+        Android android = androidService.createAndroid(androidDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(android);
 
     }
 }

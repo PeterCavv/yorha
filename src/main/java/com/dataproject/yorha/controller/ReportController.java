@@ -1,6 +1,6 @@
 package com.dataproject.yorha.controller;
 
-import com.dataproject.yorha.model.Report;
+import com.dataproject.yorha.entity.Report;
 import com.dataproject.yorha.service.ReportService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/reports")
+@RequestMapping("/reports")
 public class ReportController {
 
         @Autowired
