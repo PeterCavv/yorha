@@ -53,28 +53,29 @@ public class AndroidService extends AndroidDTO{
         android.setType_number(androidDTO.getType_number());
 
         Model model = new Model();
-        model = modelRepository.findAll().stream().filter(modelR -> modelR.getId()
-                .equals(androidDTO.getModelId())).toList().get(0);
-        android.setModel(model);
+        try {
+            model = modelRepository.findAll().stream().filter(modelR -> modelR.getId()
+                    .equals(androidDTO.getModelId())).toList().get(0);
+            android.setModel(model);
+        } catch (IndexOutOfBoundsException obj) {
+            throw new RuntimeException("Model not found with ID: " + androidDTO.getModelId());
+        }
 
-        if(android.getModel().getName().equals("YoRHa")) {
-            //Se crean las clases correspondientes que tendrán los IDs obtenidos desde la petición HTTP
-            Type type = new Type();
-            try {
-                type = typeRepository.findAll().stream().filter(typeR -> typeR.getId()
-                        .equals(androidDTO.getTypeId())).toList().get(0);
-                android.setType(type);
-            } catch (IndexOutOfBoundsException obj) {
-                throw new RuntimeException("Type not found with ID: " + androidDTO.getTypeId());
-            }
-        } else {
-            android.setType(null);
+        Type type = new Type();
+        try {
+            type = typeRepository.findAll().stream().filter(typeR -> typeR.getId()
+                    .equals(androidDTO.getTypeId())).toList().get(0);
+            android.setType(type);
+        } catch (IndexOutOfBoundsException obj) {
+            throw new RuntimeException("Type not found with ID: " + androidDTO.getTypeId());
         }
 
         Appearance appearance = new Appearance();
         appearance.setId(androidDTO.getAppearanceId());
         android.setAppearance(appearance);
 
+        //Si el modelo del androide es YoRHa, se creará su nombre en valor a sus parámetros.
+        //En caso contrario, debería haberse obtenido su nombre en el front.
         if(android.getModel().getName().equals("YoRHa")) {
             android.setName(android.getModel().getName() + " No. " + android.getType_number()
                     + " Type " + android.getType().getName().charAt(0));
