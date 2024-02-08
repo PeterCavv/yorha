@@ -49,17 +49,24 @@ public class AndroidService extends AndroidDTO{
     public Android createAndroid(AndroidDTO androidDTO){
 
         Android android = new Android();
-        android.setDesc(androidDTO.getDesc().isEmpty() ? "" : androidDTO.getDesc());
-        android.setType_number(androidDTO.getType_number());
+
+        //Si la descripción del androide está vacía, añade un String de longitud 0. En caso
+        //contrario, se eliminarán los espacios vacios del inicio y del final y se guardará
+        //en el adroide.
+        android.setDesc(androidDTO.getDesc().isBlank() ? "" : androidDTO.getDesc().trim());
+
 
         Model model = new Model();
-        try {
+        //Si se recorren todos los modelos y el ID del obtenido por la petición http no existe
+        //en la BDD, se mandará un error.
+        try{
             model = modelRepository.findAll().stream().filter(modelR -> modelR.getId()
                     .equals(androidDTO.getModelId())).toList().get(0);
             android.setModel(model);
         } catch (IndexOutOfBoundsException obj) {
             throw new RuntimeException("Model not found with ID: " + androidDTO.getModelId());
         }
+
 
         Type type = new Type();
         try {
@@ -70,6 +77,8 @@ public class AndroidService extends AndroidDTO{
             throw new RuntimeException("Type not found with ID: " + androidDTO.getTypeId());
         }
 
+        android.setType_number(androidDTO.getType_number());
+
         Appearance appearance = new Appearance();
         appearance.setId(androidDTO.getAppearanceId());
         android.setAppearance(appearance);
@@ -77,15 +86,21 @@ public class AndroidService extends AndroidDTO{
         //Si el modelo del androide es YoRHa, se creará su nombre en valor a sus parámetros.
         //En caso contrario, debería haberse obtenido su nombre en el front.
         if(android.getModel().getName().equals("YoRHa")) {
-            android.setName(android.getModel().getName() + " No. " + android.getType_number()
+            android.setName(android.getModel().getName() + " No." + android.getType_number()
                     + " Type " + android.getType().getName().charAt(0));
-            android.setShort_name(String.valueOf(android.getType_number()) + android.getType().getName().charAt(0));
+            android.setShort_name(String.valueOf(android.getType_number())
+                    + android.getType().getName().charAt(0));
         } else {
-            android.setName(androidDTO.getName());
+            android.setName(androidDTO.getName().trim());
         }
 
         android.setState(stateRepository.findAll().stream().filter(state -> state.getName()
                 .equals("Operational")).toList().get(0));
+
+        if(android.getType().getName().equals("Operator")){
+            androidRepository.save(android);
+            return operatorService.createOperator(android);
+        }
 
         return androidRepository.save(android);
     }

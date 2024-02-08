@@ -1,6 +1,7 @@
 package com.dataproject.yorha.service;
 
 import com.dataproject.yorha.entity.Operator;
+import com.dataproject.yorha.entity.Android;
 import com.dataproject.yorha.repository.OperatorRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,14 @@ public class OperatorService {
         return operatorRepository.findById(id);
     }
 
-    public void createOperator(Operator operator){
-        operatorRepository.insert(operator);
+    public Android createOperator(Android android){
+        Operator operator = new Operator();
+
+        operator.setName(android);
+
+        operatorRepository.save(operator);
+
+        return android;
 
     }
 }
