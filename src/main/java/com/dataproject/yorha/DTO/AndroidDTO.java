@@ -26,4 +26,6 @@ public class AndroidDTO implements Serializable {
 
     private String desc;
 
+    private boolean isOperator;
+
 }
