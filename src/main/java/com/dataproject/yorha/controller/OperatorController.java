@@ -26,7 +26,7 @@ public class OperatorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Operator>> getOneOperator(@PathVariable ObjectId id){
+    public ResponseEntity<Optional<Operator>> getOneOperator(@PathVariable String id){
         return new ResponseEntity<Optional<Operator>>(operatorService.oneOperator(id), HttpStatus.OK);
     }
 }

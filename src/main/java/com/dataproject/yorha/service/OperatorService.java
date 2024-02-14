@@ -18,7 +18,7 @@ public class OperatorService {
         return operatorRepository.findAll();
     }
 
-    public Optional<Operator> oneOperator(ObjectId id) {
+    public Optional<Operator> oneOperator(String id) {
         return operatorRepository.findById(id);
     }
 

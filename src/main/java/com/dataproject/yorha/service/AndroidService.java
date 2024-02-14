@@ -33,11 +33,11 @@ public class AndroidService extends AndroidDTO{
     @Autowired
     private OperatorService operatorService;
 
-    public List<Android> allAndroids() {
+    public List<Android> findAll() {
         return androidRepository.findAll();
     }
 
-    public Optional<Android> oneAndroid(ObjectId id) {
+    public Optional<Android> findById(String id) {
         return androidRepository.findById(id);
     }
 
@@ -46,7 +46,7 @@ public class AndroidService extends AndroidDTO{
      * @param androidDTO Object obtained from the http post petition.
      * @return
      */
-    public Android createAndroid(AndroidDTO androidDTO){
+    public Android createAndroid(AndroidDTO androidDTO) {
 
         Android android = new Android();
 
