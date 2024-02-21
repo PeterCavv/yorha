@@ -1,5 +1,6 @@
 package com.dataproject.yorha.DTO;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.types.ObjectId;
@@ -25,5 +26,9 @@ public class AndroidDTO implements Serializable {
     private String stateId;
 
     private String desc;
+
+    //This annotation is used to let Jackson uses the field name to determine the property name.
+    @JsonProperty
+    private boolean isOperator;
 
 }

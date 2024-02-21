@@ -25,7 +25,7 @@ public class TypeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Type>> getOneType(@PathVariable ObjectId id){
+    public ResponseEntity<Optional<Type>> getOneType(@PathVariable String id){
         return new ResponseEntity<Optional<Type>>(typeService.oneType(id), HttpStatus.OK);
     }
 

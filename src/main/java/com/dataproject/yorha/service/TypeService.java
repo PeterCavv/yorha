@@ -19,7 +19,7 @@ public class TypeService {
         return typeRepository.findAll();
     }
 
-    public Optional<Type> oneType(ObjectId id) {
+    public Optional<Type> oneType(String id) {
         return typeRepository.findById(id);
     }
 

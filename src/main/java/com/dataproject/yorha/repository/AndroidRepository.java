@@ -9,6 +9,6 @@ import java.util.List;
 
 
 @Repository
-public interface AndroidRepository extends MongoRepository<Android, ObjectId> {
+public interface AndroidRepository extends MongoRepository<Android, String> {
 
 }

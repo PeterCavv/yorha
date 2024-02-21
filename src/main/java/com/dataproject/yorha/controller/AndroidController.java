@@ -26,25 +26,41 @@ public class AndroidController {
     @Autowired
     private AndroidService androidService;
 
+    /**
+     * Method to get all the Androids created.
+     * @return
+     */
     @GetMapping
     public ResponseEntity<List<Android>> getAllAndroids(){
-        return new ResponseEntity<List<Android>>(androidService.allAndroids(), HttpStatus.OK);
+        return new ResponseEntity<List<Android>>(androidService.findAll(), HttpStatus.OK);
     }
 
+    /**
+     * Method to obtain an Android with a specific ID.
+     * @param id The ID of the Android to obtain.
+     * @return
+     */
     @GetMapping("/{id}")
-    public ResponseEntity<Android> getOneAndroide(@PathVariable ObjectId id){
-        Optional<Android> android = androidService.oneAndroid(id);
+    public ResponseEntity<Android> getOneAndroide(@PathVariable String id){
+        Optional<Android> android = androidService.findById(id);
 
+        //Check if the ID exist.
         if(android.isPresent()){
             return ResponseEntity.ok(android.get());
         }
         return ResponseEntity.notFound().build();
     }
 
+    /**
+     * Method to create an Android.
+     * @param androidDto Android to create obtained from the http request.
+     * @return
+     */
     @PostMapping
-    public ResponseEntity<Android> createOneAndroid(@RequestBody @Validated AndroidDTO androidDTO)
+    public ResponseEntity<Android> createOneAndroid(@RequestBody @Validated AndroidDTO androidDto)
     {
-        Android android = androidService.createAndroid(androidDTO);
+        //Here will be created and saved the Android.
+        Android android = androidService.createAndroid(androidDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(android);
 
     }

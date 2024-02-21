@@ -1,15 +1,14 @@
 package com.dataproject.yorha.controller;
 
+import com.dataproject.yorha.DTO.ReportDTO;
 import com.dataproject.yorha.entity.Report;
 import com.dataproject.yorha.service.ReportService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +26,20 @@ public class ReportController {
         }
 
         @GetMapping("/{id}")
-        public ResponseEntity<Optional<Report>> getOneAndroide(@PathVariable ObjectId id){
-            return new ResponseEntity<Optional<Report>>(reportService.oneReport(id), HttpStatus.OK);
+        public ResponseEntity<Report> getOneReport(@PathVariable String id){
+            Optional<Report> report = reportService.findById(id);
+
+            if( report.isPresent() ){
+                return ResponseEntity.ok(report.get());
+            }
+
+            return ResponseEntity.notFound().build();
+        }
+
+        @PostMapping
+        public ResponseEntity<Report> createOneReport(@RequestBody @Validated ReportDTO reportDto){
+
+            Report report = reportService.createOneReport(reportDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(report);
         }
 }
