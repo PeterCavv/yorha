@@ -5,9 +5,9 @@ Welcome to the backend of the YoRHa app proyect! Here you can find the way the d
 
 ## What is the YoRHa Proyect?
 
-This proyect is mostly influenced by the game NieR: Automata, a game that take place in a distante future where humans are no longer alive, and androids (created by them) are protecting the Earth from the machines, who came from space. 
+This proyect is mostly influenced by the game NieR: Automata, a game that take place in a distant future where humans are no longer alive, and androids (created by them) are protecting the Earth from the machines, who came from space. 
 
-The proyect is like the management application of the androids organization called YoRHa.
+The proyect is a management application of the androids organization called YoRHa.
 
 
 ## What can I do in this App?
