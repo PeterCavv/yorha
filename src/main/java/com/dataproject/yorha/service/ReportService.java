@@ -6,7 +6,6 @@ import com.dataproject.yorha.entity.Report;
 import com.dataproject.yorha.exception.ObjectNotFoundException;
 import com.dataproject.yorha.repository.AndroidRepository;
 import com.dataproject.yorha.repository.ReportRepository;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
