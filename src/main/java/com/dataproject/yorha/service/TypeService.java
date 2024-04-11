@@ -3,7 +3,6 @@ package com.dataproject.yorha.service;
 import com.dataproject.yorha.DTO.TypeDTO;
 import com.dataproject.yorha.entity.Type;
 import com.dataproject.yorha.repository.TypeRepository;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -71,17 +71,7 @@ public class AndroidService extends AndroidDTO{
 
         //If there is no name for the Android, that means the Android provided is a YoRHa model,
         //then the name will be created here.
-        if( androidDTO.getName().isBlank() ) {
-            char letterType = typeRepository.findAll().stream()
-                    .filter( type1 -> type1.getId().equals(android.getType().getId()) )
-                    .toList().get(0).getName().charAt(0);
-
-            android.setName( "YoRHa No." + android.getType_number()
-                    + " Type " + letterType );
-            android.setShort_name( String.valueOf( android.getType_number() ) + letterType );
-        } else {
-            android.setName( androidDTO.getName().trim() );
-        }
+        createAndroidName(android, androidDTO);
 
         //This is to set the state 'Operational' to the Android.
         android.setState( stateRepository.findAll().stream()
@@ -94,22 +84,13 @@ public class AndroidService extends AndroidDTO{
 
         //If the Android created is an Operator type, then it will be created too, but at the
         //Operators document of the BDD.
-        if(androidDTO.isOperator()){
-            Operator newOperator = new Operator();
-
-            newOperator.setName(newAndroid);
-
-            //Create an empty ArrayList to the androids of the Operator.
-            List<Android> androidsList = new ArrayList<>();
-            newOperator.setAndroids( androidsList );
-
-            operatorService.createOperator( newOperator );
-
-        }
+        operatorCheck(newAndroid, androidDTO);
 
         //Return the Android created.
         return newAndroid;
     }
+
+    //METHODS
 
     /**
      * Method to validate the IDs of the attributes from the Android.
@@ -121,12 +102,53 @@ public class AndroidService extends AndroidDTO{
         }
 
         if( !modelRepository.existsById( androidDTO.getModelId() ) ){
-            throw new ObjectNotFoundException( "Model not found with the ID: " + androidDTO.getTypeId() );
+            throw new ObjectNotFoundException( "Model not found with the ID: " + androidDTO.getModelId() );
         }
 
         if( !appearanceRepository.existsById( androidDTO.getAppearanceId() ) ){
-            throw new ObjectNotFoundException( "Appearance not found with the ID: " + androidDTO.getTypeId() );
+            throw new ObjectNotFoundException( "Appearance not found with the ID: " + androidDTO.getAppearanceId() );
         }
     }
+
+    /**
+     * Create the name that will be used by the android.
+     * @param android
+     * @param androidDTO
+     */
+    private void createAndroidName(Android android, AndroidDTO androidDTO){
+        if( androidDTO.getName().isBlank() ) {
+            char letterType = typeRepository.findAll().stream()
+                    .filter( type1 -> type1.getId().equals(android.getType().getId()) )
+                    .toList().get(0).getName().charAt(0);
+
+            android.setName( "YoRHa No." + android.getType_number()
+                    + " Type " + letterType );
+            android.setShort_name( String.valueOf( android.getType_number() ) + letterType );
+        } else {
+            android.setName( androidDTO.getName().trim() );
+        }
+    }
+
+    /**
+     * Checks if the android is an operator. If it is, an Operator will be created.
+     * @param android Android created.
+     * @param androidDTO
+     */
+    private void operatorCheck(Android android, AndroidDTO androidDTO){
+        if(androidDTO.isOperator()){
+            Operator newOperator = new Operator();
+
+            newOperator.setName(android);
+
+            //Create an empty ArrayList to the androids of the Operator.
+            List<Android> androidsList = new ArrayList<>();
+            newOperator.setAndroids( androidsList );
+
+            operatorService.createOperator( newOperator );
+
+        }
+    }
+
+    //END OF METHODS
 
 }

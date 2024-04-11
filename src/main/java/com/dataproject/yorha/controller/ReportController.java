@@ -3,7 +3,6 @@ package com.dataproject.yorha.controller;
 import com.dataproject.yorha.DTO.ReportDTO;
 import com.dataproject.yorha.entity.Report;
 import com.dataproject.yorha.service.ReportService;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

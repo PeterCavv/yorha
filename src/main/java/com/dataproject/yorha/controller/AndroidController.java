@@ -4,9 +4,7 @@ import com.dataproject.yorha.DTO.AndroidDTO;
 import com.dataproject.yorha.entity.*;
 import com.dataproject.yorha.service.AndroidService;
 import com.dataproject.yorha.service.TypeService;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +39,7 @@ public class AndroidController {
      * @return
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Android> getOneAndroide(@PathVariable String id){
+    public ResponseEntity<Android> getOneAndroid(@PathVariable String id){
         Optional<Android> android = androidService.findById(id);
 
         //Check if the ID exist.
