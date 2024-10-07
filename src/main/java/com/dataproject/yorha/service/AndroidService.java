@@ -56,11 +56,11 @@ public class AndroidService extends AndroidDTO{
         android.setDesc(androidDTO.getDesc().isBlank() ? "" : androidDTO.getDesc().trim());
 
         Model model = new Model();
-        model.setId(androidDTO.getModelId());
+        model.setId( androidDTO.getModelId() );
         android.setModel(model);
 
         Type type = new Type();
-        type.setId(androidDTO.getTypeId());
+        type.setId( androidDTO.getTypeId() );
         android.setType(type);
 
         Appearance appearance = new Appearance();
