@@ -51,11 +51,14 @@ public class ReportService {
         validateReportDto(reportDto);
 
         report.setName(reportDto.getName());
-        report.setContent(report.getContent());
+
+        report.setContent(reportDto.getContent());
 
         Android android = new Android();
-        android.setId(reportDto.getAndroidId());
+        android.setId( reportDto.getAndroidId() );
         report.setAndroid(android);
+
+        reportRepository.save(report);
 
         return report;
     }
