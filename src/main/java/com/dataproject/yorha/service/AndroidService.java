@@ -69,6 +69,8 @@ public class AndroidService extends AndroidDTO{
 
         android.setType_number( androidDTO.getType_number() );
 
+        android.setAssigned_operator(null);
+
         //If there is no name for the Android, that means the Android provided is a YoRHa model,
         //then the name will be created here.
         createAndroidName(android, androidDTO);
@@ -98,15 +100,18 @@ public class AndroidService extends AndroidDTO{
      */
     private void validateIdAttributes(AndroidDTO androidDTO){
         if( !typeRepository.existsById( androidDTO.getTypeId() ) ){
-            throw new ObjectNotFoundException( "Type not found with the ID: " + androidDTO.getTypeId() );
+            throw new ObjectNotFoundException(
+                    "Type not found with the ID: " + androidDTO.getTypeId() );
         }
 
         if( !modelRepository.existsById( androidDTO.getModelId() ) ){
-            throw new ObjectNotFoundException( "Model not found with the ID: " + androidDTO.getModelId() );
+            throw new ObjectNotFoundException(
+                    "Model not found with the ID: " + androidDTO.getModelId() );
         }
 
         if( !appearanceRepository.existsById( androidDTO.getAppearanceId() ) ){
-            throw new ObjectNotFoundException( "Appearance not found with the ID: " + androidDTO.getAppearanceId() );
+            throw new ObjectNotFoundException(
+                    "Appearance not found with the ID: " + androidDTO.getAppearanceId() );
         }
     }
 

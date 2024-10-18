@@ -1,14 +1,14 @@
 package com.dataproject.yorha.entity;
 
+import com.mongodb.lang.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.FieldType;
-import org.springframework.data.mongodb.core.mapping.MongoId;
+import org.springframework.data.mongodb.core.mapping.*;
+
+import java.util.List;
 
 @Document(collection = "androids")
 @AllArgsConstructor
@@ -41,10 +41,14 @@ public class Android {
 
     private String desc;
 
+    @DBRef(lazy = true)
+    @Field(write = Field.Write.ALWAYS)
+    private Operator assigned_operator;
+
     //private List<User> user
 
-    public Android(String name, String short_name, Model model, Type type, int type_number, Appearance appearance, State state,
-                   String desc) {
+    public Android(String name, String short_name, Model model, Type type,
+                   int type_number, Appearance appearance, State state, String desc) {
         this.name = name;
         this.short_name = short_name;
         this.model = model;
