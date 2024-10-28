@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AndroidService extends AndroidDTO{
@@ -31,6 +32,12 @@ public class AndroidService extends AndroidDTO{
 
     @Autowired
     private OperatorService operatorService;
+
+    @Autowired
+    private ExecutionerService executionerService;
+
+    @Autowired
+    public ArmoryRepository armoryRepository;
 
     public List<Android> findAll() {
         return androidRepository.findAll();
@@ -86,7 +93,7 @@ public class AndroidService extends AndroidDTO{
 
         //If the Android created is an Operator type, then it will be created too, but at the
         //Operators document of the BDD.
-        operatorCheck(newAndroid, androidDTO);
+        checkType(newAndroid, androidDTO);
 
         //Return the Android created.
         return newAndroid;
@@ -139,19 +146,47 @@ public class AndroidService extends AndroidDTO{
      * @param android Android created.
      * @param androidDTO
      */
-    private void operatorCheck(Android android, AndroidDTO androidDTO){
-        if(androidDTO.isOperator()){
-            Operator newOperator = new Operator();
-
-            newOperator.setName(android);
-
-            //Create an empty ArrayList to the androids of the Operator.
-            List<Android> androidsList = new ArrayList<>();
-            newOperator.setAndroids( androidsList );
-
-            operatorService.createOperator( newOperator );
-
+    private void checkType(Android android, AndroidDTO androidDTO){
+        if( androidDTO.isOperator() ){
+            prepareOperator(android);
+        } else if( androidDTO.isExecutioner() ){
+            prepareExecutioner(android);
         }
+    }
+
+    /**
+     * Prepare the Android to be created into Operators
+     * @param android Android created
+     */
+    private void prepareOperator(Android android){
+        Operator newOperator = new Operator();
+
+        newOperator.setName(android);
+
+        //Create an empty ArrayList to the androids of the Operator.
+        List<Android> androidsList = new ArrayList<>();
+        newOperator.setAndroids( androidsList );
+
+        operatorService.createOperator( newOperator );
+    }
+
+    /**
+     * Prepare the Android to be created into Executioners
+     * @param android Android created
+     */
+    private void prepareExecutioner(Android android){
+        Executioner newExecutioner = new Executioner();
+
+        newExecutioner.setName(android);
+
+        List<History> historyList = new ArrayList<>();
+        newExecutioner.setHistory(historyList);
+        newExecutioner.setEquipment(armoryRepository.findAll().stream()
+                .filter(weapon -> weapon.getName()
+                        .equals("YoRHa-issue Blade"))
+                .toList().get(0));
+
+        executionerService.createExecutioner( newExecutioner );
     }
 
     //END OF METHODS

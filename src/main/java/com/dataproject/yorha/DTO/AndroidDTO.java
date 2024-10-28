@@ -28,4 +28,7 @@ public class AndroidDTO implements Serializable {
     @JsonProperty
     private boolean isOperator;
 
+    @JsonProperty
+    private boolean isExecutioner;
+
 }
