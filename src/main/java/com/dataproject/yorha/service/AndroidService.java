@@ -37,7 +37,7 @@ public class AndroidService extends AndroidDTO{
     private ExecutionerService executionerService;
 
     @Autowired
-    public ArmoryRepository armoryRepository;
+    private ArmoryRepository armoryRepository;
 
     public List<Android> findAll() {
         return androidRepository.findAll();
