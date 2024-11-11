@@ -63,6 +63,13 @@ public class ReportService {
         return report;
     }
 
+    public Report updateOneReport(Report report, String reportId){
+
+        reportRepository.save(report);
+
+        return report;
+    }
+
     /**
      * Method to validate the attributes of the Report.
      * @param reportDto Report obtained from the http request.
@@ -70,6 +77,13 @@ public class ReportService {
     private void validateReportDto(ReportDTO reportDto){
         if( !androidRepository.existsById(reportDto.getAndroidId()) ){
             throw new ObjectNotFoundException("Android not found with ID: " + reportDto.getAndroidId());
+        }
+
+        if( !reportDto.getId().trim().isBlank() || !reportDto.getId().trim().isEmpty() ){
+            if( reportRepository.existsById(reportDto.getId()) ){
+                throw new ObjectNotFoundException("Android not found with ID: " + reportDto.getAndroidId());
+
+            }
         }
 
         if( reportDto.getName().trim().isBlank() ){
