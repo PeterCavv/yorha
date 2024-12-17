@@ -5,6 +5,7 @@ import com.dataproject.yorha.entity.*;
 import com.dataproject.yorha.service.AndroidService;
 import com.dataproject.yorha.service.TypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -61,5 +62,12 @@ public class AndroidController {
         Android android = androidService.createAndroid(androidDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(android);
 
+    }
+
+    @PutMapping("/{idAndroid}/{idOperator}")
+    public ResponseEntity<Optional<Android>> updateOneAndroid(@PathVariable("idAndroid") String idAndroid,
+                                                    @PathVariable("idOperator") String idOperator){
+        Optional<Android> android = androidService.addAssignedAndroid(idAndroid, idOperator);
+        return ResponseEntity.status(HttpStatus.OK).body(android);
     }
 }
