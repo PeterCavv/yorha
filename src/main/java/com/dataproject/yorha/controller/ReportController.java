@@ -41,4 +41,12 @@ public class ReportController {
             Report report = reportService.createOneReport(reportDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(report);
         }
+
+        @PutMapping("/{id}")
+        public ResponseEntity<Report> updateOneReport(@RequestBody @Validated Report report,
+                                                      @PathVariable("id") String reportId){
+
+            reportService.updateOneReport(report, reportId);
+            return ResponseEntity.status(HttpStatus.OK).body(report);
+        }
 }

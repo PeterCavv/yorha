@@ -34,6 +34,9 @@ public class AndroidService extends AndroidDTO{
     private OperatorService operatorService;
 
     @Autowired
+    private OperatorRepository operatorRepository;
+
+    @Autowired
     private ExecutionerService executionerService;
 
     @Autowired
@@ -99,7 +102,46 @@ public class AndroidService extends AndroidDTO{
         return newAndroid;
     }
 
-    //METHODS
+    public Optional<Android> addAssignedAndroid(String idAndroid, String idOperator){
+
+        validateIdAndroid(idAndroid);
+        validateIdOperator(idOperator);
+
+        Optional<Android> android = androidRepository.findById(idAndroid);
+        Optional<Operator> operator= operatorRepository.findById(idOperator);
+
+        operator.ifPresent(o -> {
+                List<Android> listAndroids = o.getAndroids();
+
+                android.ifPresent(a -> {
+                    listAndroids.add(a);
+
+                    o.setAndroids(listAndroids);
+                    a.setAssigned_operator(o);
+
+                    operatorRepository.save(o);
+                    androidRepository.save(a);
+                });
+        });
+
+        return android;
+    }
+
+    //FUNCTIONAL METHODS
+
+    private void validateIdAndroid(String idAndroid){
+        if( !androidRepository.existsById(idAndroid) ){
+            throw new ObjectNotFoundException(
+                    "Android not found with the ID: " + idAndroid );
+        }
+    }
+
+    private void validateIdOperator(String idOperator){
+        if( !operatorRepository.existsById(idOperator) ){
+            throw new ObjectNotFoundException(
+                    "Operator not found with the ID: " + idOperator );
+        }
+    }
 
     /**
      * Method to validate the IDs of the attributes from the Android.
