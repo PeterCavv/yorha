@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class AndroidService extends AndroidDTO{
@@ -39,8 +38,6 @@ public class AndroidService extends AndroidDTO{
     @Autowired
     private ExecutionerService executionerService;
 
-    @Autowired
-    private ArmoryRepository armoryRepository;
 
     public List<Android> findAll() {
         return androidRepository.findAll();
@@ -59,10 +56,8 @@ public class AndroidService extends AndroidDTO{
 
         Android android = new Android();
 
-        //Check if the attributes related with data from other documents of the BDD exists in it.
         validateIdAttributes(androidDTO);
 
-        //Check if the description of the android is blank or not.
         android.setDesc(androidDTO.getDesc().isBlank() ? "" : androidDTO.getDesc().trim());
 
         Model model = new Model();
@@ -81,46 +76,45 @@ public class AndroidService extends AndroidDTO{
 
         android.setAssigned_operator(null);
 
-        //If there is no name for the Android, that means the Android provided is a YoRHa model,
-        //then the name will be created here.
         createAndroidName(android, androidDTO);
 
-        //This is to set the state 'Operational' to the Android.
         android.setState( stateRepository.findAll().stream()
                 .filter( state -> state.getName().equals("Operational") )
                 .toList().get(0) );
 
-        //Save the Android and put the return value to a new variable because,
-        //if we need to create an Operator, we need the ID of it.
         Android newAndroid = androidRepository.save(android);
 
-        //If the Android created is an Operator type, then it will be created too, but at the
-        //Operators document of the BDD.
         checkType(newAndroid, androidDTO);
 
-        //Return the Android created.
         return newAndroid;
     }
 
+    /**
+     * Assing an Android to an Operator. The Android will be added to the Operator's android list,
+     * and the android will be assigned to an Operator.
+     * @param idAndroid
+     * @param idOperator
+     * @return
+     */
     public Optional<Android> addAssignedAndroid(String idAndroid, String idOperator){
 
         validateIdAndroid(idAndroid);
         validateIdOperator(idOperator);
 
         Optional<Android> android = androidRepository.findById(idAndroid);
-        Optional<Operator> operator= operatorRepository.findById(idOperator);
+        Optional<Operator> operator = operatorRepository.findById(idOperator);
 
-        operator.ifPresent(o -> {
-                List<Android> listAndroids = o.getAndroids();
+        operator.ifPresent(operator1 -> {
+                List<Android> listAndroids = operator1.getAndroids();
 
-                android.ifPresent(a -> {
-                    listAndroids.add(a);
+                android.ifPresent(android1 -> {
+                    listAndroids.add(android1);
 
-                    o.setAndroids(listAndroids);
-                    a.setAssigned_operator(o);
+                    operator1.setAndroids(listAndroids);
+                    android1.setAssigned_operator(operator1);
 
-                    operatorRepository.save(o);
-                    androidRepository.save(a);
+                    operatorRepository.save(operator1);
+                    androidRepository.save(android1);
                 });
         });
 
@@ -129,6 +123,10 @@ public class AndroidService extends AndroidDTO{
 
     //FUNCTIONAL METHODS
 
+    /**
+     * Validate if the android ID exist.
+     * @param idAndroid
+     */
     private void validateIdAndroid(String idAndroid){
         if( !androidRepository.existsById(idAndroid) ){
             throw new ObjectNotFoundException(
@@ -136,6 +134,10 @@ public class AndroidService extends AndroidDTO{
         }
     }
 
+    /**
+     * Validate if the operator ID exist.
+     * @param idOperator
+     */
     private void validateIdOperator(String idOperator){
         if( !operatorRepository.existsById(idOperator) ){
             throw new ObjectNotFoundException(
@@ -205,10 +207,6 @@ public class AndroidService extends AndroidDTO{
 
         newOperator.setName(android);
 
-        //Create an empty ArrayList to the androids of the Operator.
-        List<Android> androidsList = new ArrayList<>();
-        newOperator.setAndroids( androidsList );
-
         operatorService.createOperator( newOperator );
     }
 
@@ -220,13 +218,6 @@ public class AndroidService extends AndroidDTO{
         Executioner newExecutioner = new Executioner();
 
         newExecutioner.setName(android);
-
-        List<History> historyList = new ArrayList<>();
-        newExecutioner.setHistory(historyList);
-        newExecutioner.setEquipment(armoryRepository.findAll().stream()
-                .filter(weapon -> weapon.getName()
-                        .equals("YoRHa-issue Blade"))
-                .toList().get(0));
 
         executionerService.createExecutioner( newExecutioner );
     }
