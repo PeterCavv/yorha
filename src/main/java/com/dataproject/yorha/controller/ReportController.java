@@ -43,10 +43,11 @@ public class ReportController {
         }
 
         @PutMapping("/{id}")
-        public ResponseEntity<Report> updateOneReport(@RequestBody @Validated Report report,
-                                                      @PathVariable("id") String reportId){
+        public ResponseEntity<Optional<Report>> updateOneReport(@PathVariable("id") String reportId,
+                                                    @RequestBody @Validated ReportDTO reportDto){
 
-            reportService.updateOneReport(report, reportId);
+
+            Optional<Report> report = reportService.updateOneReport(reportDto, reportId);
             return ResponseEntity.status(HttpStatus.OK).body(report);
         }
 }

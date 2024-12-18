@@ -9,8 +9,6 @@ import java.io.Serializable;
 @Setter
 public class ReportDTO implements Serializable {
 
-    private String id;
-
     private String name;
 
     private String content;
