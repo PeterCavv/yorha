@@ -27,7 +27,7 @@ public class OperatorService {
 
         List<Android> androidsList = new ArrayList<>();
         operator.setAndroids( androidsList );
-        
+
         operatorRepository.save(operator);
 
     }
