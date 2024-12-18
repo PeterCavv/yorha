@@ -9,6 +9,7 @@ import com.dataproject.yorha.repository.ReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,8 +48,7 @@ public class ReportService {
 
         Report report = new Report();
 
-        //Validating if everything send exist or aren't empty.
-        validateReportDto(reportDto);
+        validateReportAttributes(reportDto);
 
         report.setName(reportDto.getName());
 
@@ -63,27 +63,36 @@ public class ReportService {
         return report;
     }
 
-    public Report updateOneReport(Report report, String reportId){
+    public Optional<Report> updateOneReport(ReportDTO reportDto, String reportId){
 
-        reportRepository.save(report);
+        validateReportId(reportId);
+        validateReportAttributes(reportDto);
+
+        Optional<Report> report = reportRepository.findById(reportId);
+
+        report.ifPresent(rep -> {
+            rep.setName(reportDto.getName());
+            rep.setContent(reportDto.getContent());
+
+            reportRepository.save(rep);
+        });
 
         return report;
+    }
+
+    private void validateReportId(String reportId){
+        if( !reportRepository.existsById(reportId) ){
+            throw new ObjectNotFoundException("Report not found with ID: " + reportId);
+        }
     }
 
     /**
      * Method to validate the attributes of the Report.
      * @param reportDto Report obtained from the http request.
      */
-    private void validateReportDto(ReportDTO reportDto){
+    private void validateReportAttributes(ReportDTO reportDto){
         if( !androidRepository.existsById(reportDto.getAndroidId()) ){
             throw new ObjectNotFoundException("Android not found with ID: " + reportDto.getAndroidId());
-        }
-
-        if( !reportDto.getId().trim().isBlank() || !reportDto.getId().trim().isEmpty() ){
-            if( reportRepository.existsById(reportDto.getId()) ){
-                throw new ObjectNotFoundException("Android not found with ID: " + reportDto.getAndroidId());
-
-            }
         }
 
         if( reportDto.getName().trim().isBlank() ){
