@@ -79,13 +79,6 @@ public class ReportService {
             throw new ObjectNotFoundException("Android not found with ID: " + reportDto.getAndroidId());
         }
 
-        if( !reportDto.getId().trim().isBlank() || !reportDto.getId().trim().isEmpty() ){
-            if( reportRepository.existsById(reportDto.getId()) ){
-                throw new ObjectNotFoundException("Android not found with ID: " + reportDto.getAndroidId());
-
-            }
-        }
-
         if( reportDto.getName().trim().isBlank() ){
             //throw new Exception();
         }
