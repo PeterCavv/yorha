@@ -64,10 +64,17 @@ public class AndroidController {
 
     }
 
-    @PutMapping("/{idAndroid}/{idOperator}")
+    @PutMapping("/add/{idAndroid}/{idOperator}")
     public ResponseEntity<Optional<Android>> updateOneAndroid(@PathVariable("idAndroid") String idAndroid,
                                                     @PathVariable("idOperator") String idOperator){
         Optional<Android> android = androidService.addAssignedAndroid(idAndroid, idOperator);
+        return ResponseEntity.status(HttpStatus.OK).body(android);
+    }
+
+    @PutMapping("/remove/{idAndroid}/{idOperator}")
+    public ResponseEntity<Optional<Android>> deleteAssignedAndroid(@PathVariable("idAndroid") String idAndroid,
+                                                              @PathVariable("idOperator") String idOperator){
+        Optional<Android> android = androidService.deleteAssignedAndroid(idAndroid, idOperator);
         return ResponseEntity.status(HttpStatus.OK).body(android);
     }
 }
