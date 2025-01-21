@@ -121,6 +121,29 @@ public class AndroidService extends AndroidDTO{
         return android;
     }
 
+    public Optional<Android> deleteAssignedAndroid(String idAndroid, String idOperator){
+        validateIdAndroid(idAndroid);
+        validateIdOperator(idOperator);
+
+        Optional<Android> android = androidRepository.findById(idAndroid);
+        Optional<Operator> operator = operatorRepository.findById(idOperator);
+
+        operator.ifPresent(operator1 -> {
+            List<Android> listAndroids = operator1.getAndroids().stream()
+                    .filter(android1 -> !android1.getId().equals(idAndroid)).toList();
+
+            android.ifPresent(android1 -> {
+                android1.setAssigned_operator(null);
+                operator1.setAndroids(listAndroids);
+
+                operatorRepository.save(operator1);
+                androidRepository.save(android1);
+            });
+        });
+
+        return android;
+    }
+
     //FUNCTIONAL METHODS
 
     /**
