@@ -2,6 +2,7 @@ package com.dataproject.yorha.service;
 
 import com.dataproject.yorha.DTO.AndroidDTO;
 import com.dataproject.yorha.entity.*;
+import com.dataproject.yorha.exception.DuplicatedObjectException;
 import com.dataproject.yorha.exception.ObjectNotFoundException;
 import com.dataproject.yorha.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,6 +109,9 @@ public class AndroidService extends AndroidDTO{
                 List<Android> listAndroids = operator1.getAndroids();
 
                 android.ifPresent(android1 -> {
+
+                    checkIfDuplicate(android1, listAndroids, idOperator);
+
                     listAndroids.add(android1);
 
                     operator1.setAndroids(listAndroids);
@@ -219,6 +223,25 @@ public class AndroidService extends AndroidDTO{
         } else if( androidDTO.isExecutioner() ){
             prepareExecutioner(android);
         }
+    }
+
+    /**
+     * Check if the Android have
+     * @param android
+     * @param operatorAndroids
+     * @param idOperator
+     */
+    private void checkIfDuplicate(Android android, List<Android> operatorAndroids, String idOperator){
+        if( android.getAssigned_operator() != null ){
+            if( operatorAndroids.contains(android) || android.getAssigned_operator().getId().equals(idOperator) ){
+                throw new DuplicatedObjectException(
+                        "Operator already have this Android assigned.");
+            }
+            throw new DuplicatedObjectException(
+                    "Android is already assigned to an Operator");
+        }
+
+
     }
 
     /**
