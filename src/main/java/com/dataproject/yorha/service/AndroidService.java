@@ -229,7 +229,7 @@ public class AndroidService extends AndroidDTO{
      * Check if the Android have
      * @param android
      * @param operatorAndroids
-     * @param operator
+     * @param idOperator
      */
     private void checkIfDuplicate(Android android, List<Android> operatorAndroids, String idOperator){
         if( android.getAssigned_operator() != null ){
