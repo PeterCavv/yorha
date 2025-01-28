@@ -2,6 +2,7 @@ package com.dataproject.yorha.service;
 
 import com.dataproject.yorha.DTO.TypeDTO;
 import com.dataproject.yorha.entity.Type;
+import com.dataproject.yorha.exception.ObjectNotFoundException;
 import com.dataproject.yorha.repository.TypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,5 +38,12 @@ public class TypeService {
 
     public void delete(String name){
         typeRepository.deleteByName(name);
+    }
+
+    public void validateType(String typeId) {
+        if( !typeRepository.existsById( typeId ) ){
+            throw new ObjectNotFoundException(
+                    "Type not found with the ID: " + typeId );
+        }
     }
 }
