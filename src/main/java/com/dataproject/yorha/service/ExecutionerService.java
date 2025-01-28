@@ -2,6 +2,7 @@ package com.dataproject.yorha.service;
 
 import com.dataproject.yorha.entity.Executioner;
 import com.dataproject.yorha.entity.History;
+import com.dataproject.yorha.exception.ObjectNotFoundException;
 import com.dataproject.yorha.repository.ArmoryRepository;
 import com.dataproject.yorha.repository.ExecutionerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,4 +37,24 @@ public class ExecutionerService {
         executionerRepository.save(executioner);
     }
 
+    //METHODS
+
+    /**
+     * Validate if the Executioner actually exists.
+     * @param idExecutioner executioner's ID.
+     */
+    public void validateIdExecutioner( String idExecutioner ) {
+        if( !executionerRepository.existsById(idExecutioner) ){
+            throw new ObjectNotFoundException(
+                    "Executioner not found with the ID: " + idExecutioner );
+        }
+    }
+
+    /**
+     * Save the Executioner into DB.
+     * @param executioner executioner to save.
+     */
+    public void saveExecutioner( Executioner executioner ){
+        executionerRepository.save( executioner );
+    }
 }
