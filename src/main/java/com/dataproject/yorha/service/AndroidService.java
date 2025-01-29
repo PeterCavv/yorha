@@ -51,7 +51,6 @@ public class AndroidService extends AndroidDTO{
     /**
      * Method to create an Android
      * @param androidDTO Object obtained from the http post petition.
-     * @return
      */
     public Android createAndroid(AndroidDTO androidDTO) {
 
@@ -93,9 +92,8 @@ public class AndroidService extends AndroidDTO{
     /**
      * Assing an Android to an Operator. The Android will be added to the Operator's android list,
      * and the android will be assigned to an Operator.
-     * @param idAndroid
-     * @param idOperator
-     * @return
+     * @param idAndroid Android's ID
+     * @param idOperator Operator's ID
      */
     public Optional<Android> addAssignedAndroid(String idAndroid, String idOperator){
 
@@ -110,7 +108,7 @@ public class AndroidService extends AndroidDTO{
 
                 android.ifPresent(android1 -> {
 
-                    checkIfDuplicate(android1, listAndroids, idOperator);
+                    checkIfDuplicate( android1, listAndroids, idOperator );
 
                     listAndroids.add(android1);
 
@@ -134,7 +132,7 @@ public class AndroidService extends AndroidDTO{
 
         operator.ifPresent(operator1 -> {
             List<Android> listAndroids = operator1.getAndroids().stream()
-                    .filter( android1 -> !android1.getId().equals( idAndroid ) ).toList();
+                    .filter( android1 -> !android1.getId().equals(idAndroid) ).toList();
 
             android.ifPresent(android1 -> {
                 android1.setAssigned_operator(null);
@@ -163,16 +161,16 @@ public class AndroidService extends AndroidDTO{
             }
 
             executioner.ifPresent(executioner1 -> {
-                List<History> history = executioner1.getHistory();
+                List<History> historyList = executioner1.getHistory();
                 History element = new History();
 
                 element.setAndroid(android1);
                 element.setExecutioner(executioner1);
 
-                History newElement = historyService.saveHistory(element);
-                history.add(newElement);
+                element = historyService.saveHistory(element);
+                historyList.add(element);
 
-                executioner1.setHistory(history);
+                executioner1.setHistory(historyList);
 
                 android1.setState( stateService.getAllState().stream()
                         .filter( state -> state.getName().equals("Out of service") )
@@ -192,7 +190,7 @@ public class AndroidService extends AndroidDTO{
 
     /**
      * Validate if the android ID exist.
-     * @param idAndroid
+     * @param idAndroid Android's ID
      */
     private void validateIdAndroid(String idAndroid){
         if( !androidRepository.existsById(idAndroid) ){
@@ -215,8 +213,8 @@ public class AndroidService extends AndroidDTO{
 
     /**
      * Create the name that will be used by the android.
-     * @param android
-     * @param androidDTO
+     * @param android Android to set the name.
+     * @param androidDTO Object to get the necessary data.
      */
     private void createAndroidName(Android android, AndroidDTO androidDTO){
         if( androidDTO.getName().isBlank() ) {
@@ -235,7 +233,7 @@ public class AndroidService extends AndroidDTO{
     /**
      * Checks if the android is an operator. If it is, an Operator will be created.
      * @param android Android created.
-     * @param androidDTO
+     * @param androidDTO Object to get the necessary data.
      */
     private void checkType(Android android, AndroidDTO androidDTO){
         if( androidDTO.isOperator() ){
@@ -246,10 +244,10 @@ public class AndroidService extends AndroidDTO{
     }
 
     /**
-     * Check if the Android have
-     * @param android
-     * @param operatorAndroids
-     * @param idOperator
+     * Check if the Android have already an Operator or if the Operator have that Android assigned.
+     * @param android Android to check.
+     * @param operatorAndroids List of the Androids assigned to the Operator.
+     * @param idOperator Operator's ID.
      */
     private void checkIfDuplicate(Android android, List<Android> operatorAndroids, String idOperator){
         if( android.getAssigned_operator() != null ){
