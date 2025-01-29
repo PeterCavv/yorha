@@ -5,7 +5,6 @@ import com.dataproject.yorha.entity.*;
 import com.dataproject.yorha.service.AndroidService;
 import com.dataproject.yorha.service.TypeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +23,10 @@ public class AndroidController {
 
     @Autowired
     private AndroidService androidService;
+
+    //-------------------------------------------------------------------------------------------------
+    //--- GET HTTP REQUESTS ---------------------------------------------------------------------------
+    //-------------------------------------------------------------------------------------------------
 
     /**
      * Method to get all the Androids created.
@@ -50,6 +53,10 @@ public class AndroidController {
         return ResponseEntity.notFound().build();
     }
 
+    //-------------------------------------------------------------------------------------------------
+    //--- POST HTTP REQUESTS --------------------------------------------------------------------------
+    //-------------------------------------------------------------------------------------------------
+
     /**
      * Method to create an Android.
      * @param androidDto Android to create obtained from the http request.
@@ -64,17 +71,28 @@ public class AndroidController {
 
     }
 
+    //-------------------------------------------------------------------------------------------------
+    //--- PUT HTTP REQUESTS ---------------------------------------------------------------------------
+    //-------------------------------------------------------------------------------------------------
+
     @PutMapping("/add/{idAndroid}/{idOperator}")
     public ResponseEntity<Optional<Android>> updateOneAndroid(@PathVariable("idAndroid") String idAndroid,
                                                     @PathVariable("idOperator") String idOperator){
-        Optional<Android> android = androidService.addAssignedAndroid(idAndroid, idOperator);
+        Optional<Android> android = androidService.addAssignedAndroid( idAndroid, idOperator );
         return ResponseEntity.status(HttpStatus.OK).body(android);
     }
 
     @PutMapping("/remove/{idAndroid}/{idOperator}")
     public ResponseEntity<Optional<Android>> deleteAssignedAndroid(@PathVariable("idAndroid") String idAndroid,
                                                               @PathVariable("idOperator") String idOperator){
-        Optional<Android> android = androidService.deleteAssignedAndroid(idAndroid, idOperator);
+        Optional<Android> android = androidService.deleteAssignedAndroid( idAndroid, idOperator );
+        return ResponseEntity.status(HttpStatus.OK).body(android);
+    }
+
+    @PutMapping("/execute/{idAndroid}/{idExecutioner}")
+    public ResponseEntity<Optional<Android>> executeAndroid(@PathVariable("idAndroid") String idAndroid,
+                                                            @PathVariable("idExecutioner") String idExecutioner){
+        Optional<Android> android = androidService.executeAndroid( idAndroid, idExecutioner );
         return ResponseEntity.status(HttpStatus.OK).body(android);
     }
 }
