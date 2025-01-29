@@ -79,6 +79,7 @@ public class ReportService {
         report.ifPresent(rep -> {
             rep.setName(reportDto.getName());
             rep.setContent(reportDto.getContent());
+            rep.setPublish_date(reportDto.getPublishDate());
 
             reportRepository.save(rep);
         });
