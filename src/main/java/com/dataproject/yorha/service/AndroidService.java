@@ -154,11 +154,7 @@ public class AndroidService extends AndroidDTO{
         Optional<Executioner> executioner = executionerService.findById(idExecutioner);
 
         android.ifPresent(android1 -> {
-            if(android1.getAssigned_operator() != null){
-                throw new ObjectAssignedException(
-                        "Android with ID " + android1.getId() + " have an Operator assigned."
-                );
-            }
+            checkIfAssigned(android1);
 
             executioner.ifPresent(executioner1 -> {
                 List<History> historyList = executioner1.getHistory();
@@ -184,6 +180,26 @@ public class AndroidService extends AndroidDTO{
 
 
         return android;
+    }
+
+    private void checkIfAssigned(Android android1) {
+        if(android1.getAssigned_operator() != null){
+            throw new ObjectAssignedException(
+                    "Android with ID " + android1.getId() + " have an Operator assigned."
+            );
+        }
+
+        if( android1.getType().getName().equals("Operator") ){
+            Operator operator = operatorService.allOperator().stream()
+                    .filter(operator1 -> operator1.getName().getName().equals(android1.getName()))
+                    .toList().get(0);
+
+            if( operator.getAndroids() != null ){
+                throw new ObjectAssignedException(
+                        "Operator with ID " + operator.getId() + " have androids assigned."
+                );
+            }
+        }
     }
 
     //FUNCTIONAL METHODS
