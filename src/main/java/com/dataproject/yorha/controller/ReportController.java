@@ -50,4 +50,12 @@ public class ReportController {
             Optional<Report> report = reportService.updateOneReport(reportDto, reportId);
             return ResponseEntity.status(HttpStatus.OK).body(report);
         }
+
+        @DeleteMapping("/{id}")
+        public ResponseEntity<Void> deleteReport(@PathVariable("id") String id){
+
+            reportService.deleteOneReport(id);
+            return ResponseEntity.status(HttpStatus.OK).build();
+
+        }
 }

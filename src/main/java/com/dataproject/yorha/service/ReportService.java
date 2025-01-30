@@ -7,7 +7,9 @@ import com.dataproject.yorha.exception.ObjectNotFoundException;
 import com.dataproject.yorha.repository.AndroidRepository;
 import com.dataproject.yorha.repository.ReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.swing.text.html.Option;
 import java.time.DateTimeException;
@@ -85,6 +87,17 @@ public class ReportService {
         });
 
         return report;
+    }
+
+    public void deleteOneReport(String id){
+
+        validateReportId(id);
+
+        Optional<Report> report = reportRepository.findById(id);
+
+        report.ifPresent(rep -> {
+            reportRepository.delete(rep);
+        });
     }
 
     /**
