@@ -90,7 +90,7 @@ public class AndroidService extends AndroidDTO{
     }
 
     /**
-     * Assing an Android to an Operator. The Android will be added to the Operator's android list,
+     * Assign an Android to an Operator. The Android will be added to the Operator's android list,
      * and the android will be assigned to an Operator.
      * @param idAndroid Android's ID
      * @param idOperator Operator's ID
@@ -123,6 +123,13 @@ public class AndroidService extends AndroidDTO{
         return android;
     }
 
+    /**
+     * Remove the Android assigned to the Operator. The Operator assigned
+     * to the Android will be removed as well.
+     * @param idAndroid Android's ID.
+     * @param idOperator Operator's ID.
+     * @return Return an Android.
+     */
     public Optional<Android> deleteAssignedAndroid( String idAndroid, String idOperator ){
         validateIdAndroid( idAndroid );
         operatorService.validateIdOperator( idOperator );
@@ -135,6 +142,8 @@ public class AndroidService extends AndroidDTO{
                     .filter( android1 -> !android1.getId().equals(idAndroid) ).toList();
 
             android.ifPresent(android1 -> {
+                checkIfNotAssigned(android1, operator1);
+
                 android1.setAssigned_operator(null);
                 operator1.setAndroids( listAndroids );
 
@@ -146,6 +155,12 @@ public class AndroidService extends AndroidDTO{
         return android;
     }
 
+    /**
+     * Change the State of an Android to "Out of service" state.
+     * @param idAndroid Android's ID.
+     * @param idExecutioner Executioner's ID.
+     * @return Return an Android
+     */
     public Optional<Android> executeAndroid( String idAndroid, String idExecutioner ){
         validateIdAndroid(idAndroid);
         executionerService.validateIdExecutioner(idExecutioner);
@@ -157,6 +172,8 @@ public class AndroidService extends AndroidDTO{
             checkIfAssigned(android1);
 
             executioner.ifPresent(executioner1 -> {
+                checkAndroidBeforeExecute(android1, executioner1);
+
                 List<History> historyList = executioner1.getHistory();
                 History element = new History();
 
@@ -177,29 +194,7 @@ public class AndroidService extends AndroidDTO{
             });
         });
 
-
-
         return android;
-    }
-
-    private void checkIfAssigned(Android android1) {
-        if(android1.getAssigned_operator() != null){
-            throw new ObjectAssignedException(
-                    "Android with ID " + android1.getId() + " have an Operator assigned."
-            );
-        }
-
-        if( android1.getType().getName().equals("Operator") ){
-            Operator operator = operatorService.allOperator().stream()
-                    .filter(operator1 -> operator1.getName().getName().equals(android1.getName()))
-                    .toList().get(0);
-
-            if( operator.getAndroids() != null ){
-                throw new ObjectAssignedException(
-                        "Operator with ID " + operator.getId() + " have androids assigned."
-                );
-            }
-        }
     }
 
     //FUNCTIONAL METHODS
@@ -276,6 +271,69 @@ public class AndroidService extends AndroidDTO{
         }
 
 
+    }
+
+    /**
+     * Check if the Android and the Executioner are the same Android.
+     * @param android Android's ID.
+     * @param executioner Executioner.
+     */
+    private void checkAndroidBeforeExecute(Android android, Executioner executioner) {
+        if( executioner.getName().getState().getName().equals("Out of service")){
+            throw new IllegalStateException(
+                    "The Android cannot be executed by an Executioner that is out of service."
+            );
+        }
+        if( android.getState().getName().equals("Out of service") ){
+            throw new IllegalStateException(
+                    "The Android cannot be executed because it is out of service."
+            );
+        }
+        if( executioner.getName().getId().equals(android.getId()) ){
+            throw new UnsupportedOperationException("The Android cannot be executed by itself");
+        }
+    }
+
+    /**
+     * Check if the Android have an Operator assigned.
+     * @param android1 Android to check.
+     */
+    private void checkIfAssigned(Android android1) {
+        if(android1.getAssigned_operator() != null){
+            throw new ObjectAssignedException(
+                    "Android with ID " + android1.getId() + " have an Operator assigned."
+            );
+        }
+
+        if( android1.getType().getName().equals("Operator") ){
+            Operator operator = operatorService.allOperator().stream()
+                    .filter(operator1 -> operator1.getName().getName().equals(android1.getName()))
+                    .toList().get(0);
+
+            if( operator.getAndroids() != null ){
+                throw new ObjectAssignedException(
+                        "Operator with ID " + operator.getId() + " have androids assigned."
+                );
+            }
+        }
+    }
+
+    /**
+     * Check if the android doesn't have an Operator assigned.
+     * @param android1 Android to check.
+     */
+    private void checkIfNotAssigned(Android android1, Operator operator) {
+        if( android1.getAssigned_operator() == null ){
+            throw new NullPointerException(
+                    "The Android doesn't have an Operator to remove."
+            );
+        }
+        if( !android1.getAssigned_operator().getId().equals(operator.getName().getId()) ){
+            throw new UnsupportedOperationException(
+                    "The Android to remove have another different Operator " +
+                    "Assigned"
+            );
+        }
     }
 
     /**
