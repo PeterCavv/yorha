@@ -157,6 +157,8 @@ public class AndroidService extends AndroidDTO{
             checkIfAssigned(android1);
 
             executioner.ifPresent(executioner1 -> {
+                checkAndroidBeforeExecute(android1, executioner1);
+
                 List<History> historyList = executioner1.getHistory();
                 History element = new History();
 
@@ -177,29 +179,7 @@ public class AndroidService extends AndroidDTO{
             });
         });
 
-
-
         return android;
-    }
-
-    private void checkIfAssigned(Android android1) {
-        if(android1.getAssigned_operator() != null){
-            throw new ObjectAssignedException(
-                    "Android with ID " + android1.getId() + " have an Operator assigned."
-            );
-        }
-
-        if( android1.getType().getName().equals("Operator") ){
-            Operator operator = operatorService.allOperator().stream()
-                    .filter(operator1 -> operator1.getName().getName().equals(android1.getName()))
-                    .toList().get(0);
-
-            if( operator.getAndroids() != null ){
-                throw new ObjectAssignedException(
-                        "Operator with ID " + operator.getId() + " have androids assigned."
-                );
-            }
-        }
     }
 
     //FUNCTIONAL METHODS
@@ -276,6 +256,43 @@ public class AndroidService extends AndroidDTO{
         }
 
 
+    }
+
+    /**
+     * Check if the Android and the Executioner are the same Android.
+     * @param android Android's ID.
+     * @param executioner Executioner.
+     */
+    private void checkAndroidBeforeExecute(Android android, Executioner executioner) {
+        if( executioner.getName().getState().getName().equals("Out of service")){
+            throw new IllegalStateException("The Android cannot be executed by an Executioner that is out of service.");
+        }
+        if( android.getState().getName().equals("Out of service") ){
+            throw new IllegalStateException("The Android cannot be executed because it is out of service.");
+        }
+        if( executioner.getName().getId().equals(android.getId()) ){
+            throw new UnsupportedOperationException("The Android cannot be executed by itself");
+        }
+    }
+
+    private void checkIfAssigned(Android android1) {
+        if(android1.getAssigned_operator() != null){
+            throw new ObjectAssignedException(
+                    "Android with ID " + android1.getId() + " have an Operator assigned."
+            );
+        }
+
+        if( android1.getType().getName().equals("Operator") ){
+            Operator operator = operatorService.allOperator().stream()
+                    .filter(operator1 -> operator1.getName().getName().equals(android1.getName()))
+                    .toList().get(0);
+
+            if( operator.getAndroids() != null ){
+                throw new ObjectAssignedException(
+                        "Operator with ID " + operator.getId() + " have androids assigned."
+                );
+            }
+        }
     }
 
     /**
