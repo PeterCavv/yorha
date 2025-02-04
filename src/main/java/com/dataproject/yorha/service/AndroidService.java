@@ -44,6 +44,14 @@ public class AndroidService extends AndroidDTO{
         return androidRepository.findAll();
     }
 
+    public List<Android> findAllAvailable(){
+        return androidRepository.findAll().stream()
+                .filter(android -> android.getAssigned_operator() == null
+                        && !android.getState().getName().equals("Out of service")
+                        && android.getModel().getName().equals("YoRHa"))
+                .toList();
+    }
+
     public Optional<Android> findById(String id) {
         return androidRepository.findById(id);
     }
@@ -328,7 +336,7 @@ public class AndroidService extends AndroidDTO{
                     "The Android doesn't have an Operator to remove."
             );
         }
-        if( !android1.getAssigned_operator().getId().equals(operator.getName().getId()) ){
+        if( !android1.getAssigned_operator().getId().equals(operator.getId()) ){
             throw new UnsupportedOperationException(
                     "The Android to remove have another different Operator " +
                     "Assigned"

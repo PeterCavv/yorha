@@ -53,6 +53,11 @@ public class AndroidController {
         return ResponseEntity.notFound().build();
     }
 
+    @GetMapping("/available")
+    public ResponseEntity<List<Android>> getAllAvailableAndroids(){
+        return new ResponseEntity<>(androidService.findAllAvailable(), HttpStatus.OK);
+    }
+
     //-------------------------------------------------------------------------------------------------
     //--- POST HTTP REQUESTS --------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------
