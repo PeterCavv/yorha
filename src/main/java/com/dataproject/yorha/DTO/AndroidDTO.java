@@ -1,6 +1,7 @@
 package com.dataproject.yorha.DTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +11,7 @@ import java.io.Serializable;
 @Setter
 public class AndroidDTO implements Serializable {
 
+    @Size(max = 35, message = "Android's name out of length")
     private String name;
 
     private String modelId;
