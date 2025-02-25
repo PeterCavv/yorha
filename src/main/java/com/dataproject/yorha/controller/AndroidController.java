@@ -1,6 +1,7 @@
 package com.dataproject.yorha.controller;
 
-import com.dataproject.yorha.DTO.android.AndroidDTO;
+import com.dataproject.yorha.DTO.android.AndroidCreateDTO;
+import com.dataproject.yorha.DTO.android.AndroidGetDTO;
 import com.dataproject.yorha.model.*;
 import com.dataproject.yorha.service.AndroidService;
 import jakarta.validation.Valid;
@@ -31,8 +32,8 @@ public class AndroidController {
      * @return
      */
     @GetMapping
-    public ResponseEntity<List<Android>> getAllAndroids(){
-        return new ResponseEntity<List<Android>>(androidService.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<AndroidGetDTO>> getAllAndroids(){
+        return new ResponseEntity<List<AndroidGetDTO>>(androidService.findAll(), HttpStatus.OK);
     }
 
     /**
@@ -62,14 +63,14 @@ public class AndroidController {
 
     /**
      * Method to create an Android.
-     * @param androidDto Android to create obtained from the http request.
+     * @param androidCreateDto Android to create obtained from the http request.
      * @return
      */
     @PostMapping
-    public ResponseEntity<Android> createOneAndroid(@Valid @RequestBody AndroidDTO androidDto)
+    public ResponseEntity<Android> createOneAndroid(@Valid @RequestBody AndroidCreateDTO androidCreateDto)
     {
         //Here will be created and saved the Android.
-        Android android = androidService.createAndroid(androidDto);
+        Android android = androidService.createAndroid(androidCreateDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(android);
 
     }
