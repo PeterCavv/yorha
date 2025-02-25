@@ -32,8 +32,11 @@ public class AndroidController {
      * @return
      */
     @GetMapping
-    public ResponseEntity<List<GetAndroidDTO>> getAllAndroids(){
-        return new ResponseEntity<>(androidService.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<GetAndroidDTO>> getAllAndroids(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ){
+        return new ResponseEntity<>(androidService.findAll(page, size), HttpStatus.OK);
     }
 
     /**

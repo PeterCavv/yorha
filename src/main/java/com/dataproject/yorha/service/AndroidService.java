@@ -8,6 +8,8 @@ import com.dataproject.yorha.exception.ObjectAssignedException;
 import com.dataproject.yorha.exception.ObjectNotFoundException;
 import com.dataproject.yorha.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,8 +33,10 @@ public class AndroidService extends CreateAndroidDTO {
     private HistoryService historyService;
 
 
-    public List<GetAndroidDTO> findAll() {
-        return androidRepository.findAll().stream().map(GetAndroidDTO::new).toList();
+    public List<GetAndroidDTO> findAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return androidRepository.findAllAndroids(pageable)
+                .stream().map(GetAndroidDTO::new).toList();
     }
 
     public List<Android> findAllAvailable(){
