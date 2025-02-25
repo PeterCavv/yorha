@@ -24,5 +24,5 @@ Operators have other androids on their command and androids can only be created 
 
 ## Proyect Status
 
-This proyect is unfinished, being about 35% complete, there's still many implementations to be done.
+This proyect is unfinished, being about 60% complete, there's still many implementations to be done.
 If you want to take a look to the proyect, you're free to do so! You can also see how the development goes by accessing to [my workspace on Trello](https://trello.com/b/osxteix8/yorha) where I log all the tasks.
