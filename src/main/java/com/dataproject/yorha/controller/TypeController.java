@@ -1,7 +1,7 @@
 package com.dataproject.yorha.controller;
 
 import com.dataproject.yorha.DTO.TypeDTO;
-import com.dataproject.yorha.entity.Type;
+import com.dataproject.yorha.model.Type;
 import com.dataproject.yorha.service.TypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

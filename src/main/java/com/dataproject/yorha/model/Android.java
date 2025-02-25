@@ -1,4 +1,4 @@
-package com.dataproject.yorha.entity;
+package com.dataproject.yorha.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.*;
-
-import java.util.List;
 
 @Document(collection = "androids")
 @AllArgsConstructor

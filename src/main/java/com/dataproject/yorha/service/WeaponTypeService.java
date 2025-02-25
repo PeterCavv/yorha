@@ -1,6 +1,6 @@
 package com.dataproject.yorha.service;
 
-import com.dataproject.yorha.entity.WeaponType;
+import com.dataproject.yorha.model.WeaponType;
 import com.dataproject.yorha.repository.WeaponTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

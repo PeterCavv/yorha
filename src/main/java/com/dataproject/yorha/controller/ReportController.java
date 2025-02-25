@@ -1,8 +1,9 @@
 package com.dataproject.yorha.controller;
 
 import com.dataproject.yorha.DTO.ReportDTO;
-import com.dataproject.yorha.entity.Report;
+import com.dataproject.yorha.model.Report;
 import com.dataproject.yorha.service.ReportService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/reports")
+@Validated
 public class ReportController {
 
         @Autowired
@@ -36,7 +38,7 @@ public class ReportController {
         }
 
         @PostMapping
-        public ResponseEntity<Report> createOneReport(@RequestBody @Validated ReportDTO reportDto){
+        public ResponseEntity<Report> createOneReport(@Valid @RequestBody ReportDTO reportDto){
 
             Report report = reportService.createOneReport(reportDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(report);
@@ -44,7 +46,7 @@ public class ReportController {
 
         @PutMapping("/{id}")
         public ResponseEntity<Optional<Report>> updateOneReport(@PathVariable("id") String reportId,
-                                                    @RequestBody @Validated ReportDTO reportDto){
+                                                                @Valid @RequestBody ReportDTO reportDto){
 
 
             Optional<Report> report = reportService.updateOneReport(reportDto, reportId);

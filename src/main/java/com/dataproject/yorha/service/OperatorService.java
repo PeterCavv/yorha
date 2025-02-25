@@ -1,7 +1,7 @@
 package com.dataproject.yorha.service;
 
-import com.dataproject.yorha.entity.Android;
-import com.dataproject.yorha.entity.Operator;
+import com.dataproject.yorha.model.Android;
+import com.dataproject.yorha.model.Operator;
 import com.dataproject.yorha.exception.ObjectNotFoundException;
 import com.dataproject.yorha.repository.OperatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package com.dataproject.yorha.service;
 
 import com.dataproject.yorha.DTO.AndroidDTO;
-import com.dataproject.yorha.entity.*;
+import com.dataproject.yorha.model.*;
 import com.dataproject.yorha.exception.DuplicatedObjectException;
 import com.dataproject.yorha.exception.ObjectAssignedException;
 import com.dataproject.yorha.exception.ObjectNotFoundException;

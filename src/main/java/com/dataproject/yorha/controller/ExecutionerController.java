@@ -1,6 +1,6 @@
 package com.dataproject.yorha.controller;
 
-import com.dataproject.yorha.entity.Executioner;
+import com.dataproject.yorha.model.Executioner;
 import com.dataproject.yorha.service.ExecutionerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

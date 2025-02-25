@@ -1,19 +1,13 @@
 package com.dataproject.yorha.service;
 
 import com.dataproject.yorha.DTO.ReportDTO;
-import com.dataproject.yorha.entity.Android;
-import com.dataproject.yorha.entity.Report;
+import com.dataproject.yorha.model.Android;
+import com.dataproject.yorha.model.Report;
 import com.dataproject.yorha.exception.ObjectNotFoundException;
-import com.dataproject.yorha.repository.AndroidRepository;
 import com.dataproject.yorha.repository.ReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
-import javax.swing.text.html.Option;
-import java.time.DateTimeException;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,9 +16,6 @@ public class ReportService {
 
     @Autowired
     ReportRepository reportRepository;
-
-    @Autowired
-    AndroidRepository androidRepository;
 
     /**
      * Method to find all the Reports created.
@@ -49,12 +40,8 @@ public class ReportService {
 
         Report report = new Report();
 
-        validateReportAttributes(reportDto);
-
         report.setName(reportDto.getName());
-
         report.setContent(reportDto.getContent());
-
         report.setPublish_date(reportDto.getPublishDate());
 
         Android android = new Android();
@@ -74,7 +61,6 @@ public class ReportService {
     public Optional<Report> updateOneReport(ReportDTO reportDto, String reportId){
 
         validateReportId(reportId);
-        validateReportAttributes(reportDto);
 
         Optional<Report> report = reportRepository.findById(reportId);
 
@@ -110,30 +96,5 @@ public class ReportService {
         }
     }
 
-    /**
-     * Validate the attributes of the Report.
-     * @param reportDto Report obtained from the http request.
-     */
-    private void validateReportAttributes(ReportDTO reportDto){
-        if( !androidRepository.existsById(reportDto.getAndroidId()) ){
-            throw new ObjectNotFoundException(
-                    "Android not found with ID: " + reportDto.getAndroidId());
-        }
 
-        if( reportDto.getPublishDate() == null ) {
-            throw new DateTimeException("Date cannot be null.");
-        } else if( reportDto.getPublishDate().isBefore(LocalDate.now()) ){
-            throw new DateTimeException("Date need to be equal or higher than today.");
-        }
-
-        if( reportDto.getName().trim().isBlank() ){
-            throw new IllegalArgumentException("A name needs to be given to the report.");
-        }
-
-        if( reportDto.getContent().trim().isBlank() ){
-            throw new IllegalArgumentException("The report needs content.");
-        }
-
-
-    }
 }

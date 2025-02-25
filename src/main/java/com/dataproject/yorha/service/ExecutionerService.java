@@ -1,7 +1,7 @@
 package com.dataproject.yorha.service;
 
-import com.dataproject.yorha.entity.Executioner;
-import com.dataproject.yorha.entity.History;
+import com.dataproject.yorha.model.Executioner;
+import com.dataproject.yorha.model.History;
 import com.dataproject.yorha.exception.ObjectNotFoundException;
 import com.dataproject.yorha.repository.ArmoryRepository;
 import com.dataproject.yorha.repository.ExecutionerRepository;

@@ -1,9 +1,8 @@
 package com.dataproject.yorha.controller;
 
 import com.dataproject.yorha.DTO.AndroidDTO;
-import com.dataproject.yorha.entity.*;
+import com.dataproject.yorha.model.*;
 import com.dataproject.yorha.service.AndroidService;
-import com.dataproject.yorha.service.TypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,9 +16,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping(value = "/androids", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AndroidController {
-
-    @Autowired
-    private TypeService typeService;
 
     @Autowired
     private AndroidService androidService;
