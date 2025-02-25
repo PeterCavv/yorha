@@ -56,8 +56,11 @@ public class AndroidController {
     }
 
     @GetMapping("/available")
-    public ResponseEntity<List<Android>> getAllAvailableAndroids(){
-        return new ResponseEntity<>(androidService.findAllAvailable(), HttpStatus.OK);
+    public ResponseEntity<List<GetAndroidDTO>> getAllAvailableAndroids(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ){
+        return new ResponseEntity<>(androidService.findAllAvailable(page, size), HttpStatus.OK);
     }
 
     //-------------------------------------------------------------------------------------------------

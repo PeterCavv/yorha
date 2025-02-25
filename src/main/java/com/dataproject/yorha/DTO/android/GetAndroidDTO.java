@@ -4,7 +4,9 @@ import com.dataproject.yorha.DTO.common.AppearanceDTO;
 import com.dataproject.yorha.DTO.common.ModelDTO;
 import com.dataproject.yorha.DTO.common.StateDTO;
 import com.dataproject.yorha.DTO.common.TypeDTO;
+import com.dataproject.yorha.DTO.operator.GetOperatorDTO;
 import com.dataproject.yorha.model.Android;
+import com.dataproject.yorha.model.Operator;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,6 +25,7 @@ public class GetAndroidDTO implements Serializable {
     private AppearanceDTO appearance;
     private StateDTO state;
     private String desc;
+    private GetOperatorDTO assigned_operator;
 
     public GetAndroidDTO(Android android){
         this.id = android.getId();
@@ -39,6 +42,9 @@ public class GetAndroidDTO implements Serializable {
         if( android.getState() != null ){
             this.state = new StateDTO(android.getState());
         }
+        if( android.getAssigned_operator() != null ){
+            this.assigned_operator = new GetOperatorDTO(android.getAssigned_operator());
+        } 
         this.desc = android.getDesc();
         this.shortName = android.getShort_name();
         this.typeNumber = android.getType_number();

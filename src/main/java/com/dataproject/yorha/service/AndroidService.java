@@ -39,11 +39,13 @@ public class AndroidService extends CreateAndroidDTO {
                 .stream().map(GetAndroidDTO::new).toList();
     }
 
-    public List<Android> findAllAvailable(){
+    public List<GetAndroidDTO> findAllAvailable(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
         return androidRepository.findAll().stream()
-                .filter(android -> android.getAssigned_operator() == null
+        .filter(android -> android.getAssigned_operator() == null
                         && !android.getState().getName().equals("Out of service")
                         && android.getModel().getName().equals("YoRHa"))
+                .map(GetAndroidDTO::new)
                 .toList();
     }
 
