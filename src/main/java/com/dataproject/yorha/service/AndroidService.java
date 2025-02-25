@@ -64,8 +64,6 @@ public class AndroidService extends AndroidDTO{
 
         Android android = new Android();
 
-        validateIdAttributes(androidDTO);
-
         android.setDesc(androidDTO.getDesc().isBlank() ? "" : androidDTO.getDesc().trim());
 
         Model model = new Model();
@@ -218,17 +216,6 @@ public class AndroidService extends AndroidDTO{
         }
     }
 
-    /**
-     * Method to validate the IDs of the attributes from the Android.
-     * @param androidDTO Android to create obtained from the http petition.
-     */
-    private void validateIdAttributes(AndroidDTO androidDTO){
-        typeService.validateType( androidDTO.getTypeId() );
-
-        modelService.validateModel( androidDTO.getModelId() );
-
-        appearanceService.validateAppearance( androidDTO.getAppearanceId() );
-    }
 
     /**
      * Create the name that will be used by the android.
