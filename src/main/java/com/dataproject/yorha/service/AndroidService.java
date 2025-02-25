@@ -33,12 +33,24 @@ public class AndroidService extends CreateAndroidDTO {
     private HistoryService historyService;
 
 
+    /**
+     * Get all Androids.
+     * @param page
+     * @param size
+     * @return
+     */
     public List<GetAndroidDTO> findAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return androidRepository.findAllAndroids(pageable)
                 .stream().map(GetAndroidDTO::new).toList();
     }
 
+    /**
+     * Get only availa
+     * @param page
+     * @param size
+     * @return
+     */
     public List<GetAndroidDTO> findAllAvailable(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
         return androidRepository.findAll().stream()
