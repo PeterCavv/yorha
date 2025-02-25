@@ -1,6 +1,6 @@
 package com.dataproject.yorha.controller;
 
-import com.dataproject.yorha.entity.History;
+import com.dataproject.yorha.model.History;
 import com.dataproject.yorha.service.HistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

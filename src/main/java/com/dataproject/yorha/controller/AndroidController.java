@@ -1,9 +1,9 @@
 package com.dataproject.yorha.controller;
 
-import com.dataproject.yorha.DTO.AndroidDTO;
-import com.dataproject.yorha.entity.*;
+import com.dataproject.yorha.DTO.android.AndroidDTO;
+import com.dataproject.yorha.model.*;
 import com.dataproject.yorha.service.AndroidService;
-import com.dataproject.yorha.service.TypeService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,10 +16,8 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/androids", produces = MediaType.APPLICATION_JSON_VALUE)
+@Validated
 public class AndroidController {
-
-    @Autowired
-    private TypeService typeService;
 
     @Autowired
     private AndroidService androidService;
@@ -68,7 +66,7 @@ public class AndroidController {
      * @return
      */
     @PostMapping
-    public ResponseEntity<Android> createOneAndroid(@RequestBody @Validated AndroidDTO androidDto)
+    public ResponseEntity<Android> createOneAndroid(@Valid @RequestBody AndroidDTO androidDto)
     {
         //Here will be created and saved the Android.
         Android android = androidService.createAndroid(androidDto);

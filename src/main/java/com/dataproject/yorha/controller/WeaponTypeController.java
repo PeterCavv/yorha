@@ -1,6 +1,6 @@
 package com.dataproject.yorha.controller;
 
-import com.dataproject.yorha.entity.WeaponType;
+import com.dataproject.yorha.model.WeaponType;
 import com.dataproject.yorha.service.WeaponTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.dataproject.yorha.entity;
+package com.dataproject.yorha.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
