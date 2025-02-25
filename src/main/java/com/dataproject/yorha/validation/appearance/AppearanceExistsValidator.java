@@ -1,7 +1,6 @@
 package com.dataproject.yorha.validation.appearance;
 
 import com.dataproject.yorha.repository.AppearanceRepository;
-import com.dataproject.yorha.repository.StateRepository;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;

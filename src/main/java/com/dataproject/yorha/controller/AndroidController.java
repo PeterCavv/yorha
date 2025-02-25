@@ -1,6 +1,6 @@
 package com.dataproject.yorha.controller;
 
-import com.dataproject.yorha.DTO.AndroidDTO;
+import com.dataproject.yorha.DTO.android.AndroidDTO;
 import com.dataproject.yorha.model.*;
 import com.dataproject.yorha.service.AndroidService;
 import jakarta.validation.Valid;

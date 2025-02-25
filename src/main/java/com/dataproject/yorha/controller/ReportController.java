@@ -1,6 +1,7 @@
 package com.dataproject.yorha.controller;
 
-import com.dataproject.yorha.DTO.ReportDTO;
+import com.dataproject.yorha.DTO.report.ReportCreateDTO;
+import com.dataproject.yorha.DTO.report.ReportUpdateDTO;
 import com.dataproject.yorha.model.Report;
 import com.dataproject.yorha.service.ReportService;
 import jakarta.validation.Valid;
@@ -38,7 +39,7 @@ public class ReportController {
         }
 
         @PostMapping
-        public ResponseEntity<Report> createOneReport(@Valid @RequestBody ReportDTO reportDto){
+        public ResponseEntity<Report> createOneReport(@Valid @RequestBody ReportCreateDTO reportDto){
 
             Report report = reportService.createOneReport(reportDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(report);
@@ -46,7 +47,7 @@ public class ReportController {
 
         @PutMapping("/{id}")
         public ResponseEntity<Optional<Report>> updateOneReport(@PathVariable("id") String reportId,
-                                                                @Valid @RequestBody ReportDTO reportDto){
+                                                                @Valid @RequestBody ReportUpdateDTO reportDto){
 
 
             Optional<Report> report = reportService.updateOneReport(reportDto, reportId);

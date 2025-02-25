@@ -1,6 +1,6 @@
 package com.dataproject.yorha.service;
 
-import com.dataproject.yorha.DTO.AndroidDTO;
+import com.dataproject.yorha.DTO.android.AndroidDTO;
 import com.dataproject.yorha.model.*;
 import com.dataproject.yorha.exception.DuplicatedObjectException;
 import com.dataproject.yorha.exception.ObjectAssignedException;
@@ -77,8 +77,6 @@ public class AndroidService extends AndroidDTO{
         Appearance appearance = new Appearance();
         appearance.setId( androidDTO.getAppearanceId() );
         android.setAppearance( appearance );
-
-        android.setType_number( androidDTO.getType_number() );
 
         android.setAssigned_operator(null);
 

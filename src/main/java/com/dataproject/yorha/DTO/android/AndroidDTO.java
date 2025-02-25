@@ -1,4 +1,4 @@
-package com.dataproject.yorha.DTO;
+package com.dataproject.yorha.DTO.android;
 
 import com.dataproject.yorha.validation.appearance.AppearanceExists;
 import com.dataproject.yorha.validation.model.ModelExists;
