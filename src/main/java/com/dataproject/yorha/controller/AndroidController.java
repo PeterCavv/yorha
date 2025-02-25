@@ -1,7 +1,7 @@
 package com.dataproject.yorha.controller;
 
 import com.dataproject.yorha.DTO.android.CreateAndroidDTO;
-import com.dataproject.yorha.DTO.android.AndroidGetDTO;
+import com.dataproject.yorha.DTO.android.GetAndroidDTO;
 import com.dataproject.yorha.model.*;
 import com.dataproject.yorha.service.AndroidService;
 import jakarta.validation.Valid;
@@ -32,8 +32,8 @@ public class AndroidController {
      * @return
      */
     @GetMapping
-    public ResponseEntity<List<AndroidGetDTO>> getAllAndroids(){
-        return new ResponseEntity<List<AndroidGetDTO>>(androidService.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<GetAndroidDTO>> getAllAndroids(){
+        return new ResponseEntity<>(androidService.findAll(), HttpStatus.OK);
     }
 
     /**

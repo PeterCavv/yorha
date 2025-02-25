@@ -1,7 +1,7 @@
 package com.dataproject.yorha.service;
 
 import com.dataproject.yorha.DTO.android.CreateAndroidDTO;
-import com.dataproject.yorha.DTO.android.AndroidGetDTO;
+import com.dataproject.yorha.DTO.android.GetAndroidDTO;
 import com.dataproject.yorha.model.*;
 import com.dataproject.yorha.exception.DuplicatedObjectException;
 import com.dataproject.yorha.exception.ObjectAssignedException;
@@ -31,8 +31,8 @@ public class AndroidService extends CreateAndroidDTO {
     private HistoryService historyService;
 
 
-    public List<AndroidGetDTO> findAll() {
-        return androidRepository.findAll().stream().map(AndroidGetDTO::new).toList();
+    public List<GetAndroidDTO> findAll() {
+        return androidRepository.findAll().stream().map(GetAndroidDTO::new).toList();
     }
 
     public List<Android> findAllAvailable(){

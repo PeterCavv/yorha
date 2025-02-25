@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-public class AndroidGetDTO implements Serializable {
+public class GetAndroidDTO implements Serializable {
 
     private String id;
     private String name;
@@ -24,7 +24,7 @@ public class AndroidGetDTO implements Serializable {
     private StateDTO state;
     private String desc;
 
-    public AndroidGetDTO(Android android){
+    public GetAndroidDTO(Android android){
         this.id = android.getId();
         this.name = android.getName();
         if( android.getType() != null ) {
