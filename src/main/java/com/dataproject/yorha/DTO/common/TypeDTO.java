@@ -1,4 +1,4 @@
-package com.dataproject.yorha.DTO.type;
+package com.dataproject.yorha.DTO.common;
 
 
 import com.dataproject.yorha.model.Type;

@@ -1,6 +1,6 @@
 package com.dataproject.yorha.service;
 
-import com.dataproject.yorha.DTO.android.AndroidCreateDTO;
+import com.dataproject.yorha.DTO.android.CreateAndroidDTO;
 import com.dataproject.yorha.DTO.android.AndroidGetDTO;
 import com.dataproject.yorha.model.*;
 import com.dataproject.yorha.exception.DuplicatedObjectException;
@@ -14,29 +14,19 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class AndroidService extends AndroidCreateDTO {
+public class AndroidService extends CreateAndroidDTO {
 
     @Autowired
     private AndroidRepository androidRepository;
 
     @Autowired
     private OperatorService operatorService;
-
-    @Autowired
-    private AppearanceService appearanceService;
-
     @Autowired
     private ExecutionerService executionerService;
-
-    @Autowired
-    private ModelService modelService;
-
     @Autowired
     private StateService stateService;
-
     @Autowired
     private TypeService typeService;
-
     @Autowired
     private HistoryService historyService;
 
@@ -59,29 +49,29 @@ public class AndroidService extends AndroidCreateDTO {
 
     /**
      * Method to create an Android
-     * @param androidCreateDTO Object obtained from the http post petition.
+     * @param createAndroidDTO Object obtained from the http post petition.
      */
-    public Android createAndroid(AndroidCreateDTO androidCreateDTO) {
+    public Android createAndroid(CreateAndroidDTO createAndroidDTO) {
 
         Android android = new Android();
 
-        android.setDesc(androidCreateDTO.getDesc().isBlank() ? "" : androidCreateDTO.getDesc().trim());
+        android.setDesc(createAndroidDTO.getDesc().isBlank() ? "" : createAndroidDTO.getDesc().trim());
 
         Model model = new Model();
-        model.setId( androidCreateDTO.getModelId() );
+        model.setId( createAndroidDTO.getModelId() );
         android.setModel(model);
 
         Type type = new Type();
-        type.setId( androidCreateDTO.getTypeId() );
+        type.setId( createAndroidDTO.getTypeId() );
         android.setType(type);
 
         Appearance appearance = new Appearance();
-        appearance.setId( androidCreateDTO.getAppearanceId() );
+        appearance.setId( createAndroidDTO.getAppearanceId() );
         android.setAppearance( appearance );
 
         android.setAssigned_operator(null);
 
-        createAndroidName(android, androidCreateDTO);
+        createAndroidName(android, createAndroidDTO);
 
         android.setState( stateService.getAllState().stream()
                 .filter( state -> state.getName().equals("Operational") )
@@ -89,7 +79,7 @@ public class AndroidService extends AndroidCreateDTO {
 
         Android newAndroid = androidRepository.save(android);
 
-        checkType(newAndroid, androidCreateDTO);
+        checkType(newAndroid, createAndroidDTO);
 
         return newAndroid;
     }
@@ -219,10 +209,10 @@ public class AndroidService extends AndroidCreateDTO {
     /**
      * Create the name that will be used by the android.
      * @param android Android to set the name.
-     * @param androidCreateDTO Object to get the necessary data.
+     * @param createAndroidDTO Object to get the necessary data.
      */
-    private void createAndroidName(Android android, AndroidCreateDTO androidCreateDTO){
-        if( androidCreateDTO.getName().isBlank() ) {
+    private void createAndroidName(Android android, CreateAndroidDTO createAndroidDTO){
+        if( createAndroidDTO.getName().isBlank() ) {
             char letterType = typeService.allTypes().stream()
                     .filter( type1 -> type1.getId().equals(android.getType().getId()) )
                     .toList().get(0).getName().charAt(0);
@@ -231,19 +221,19 @@ public class AndroidService extends AndroidCreateDTO {
                     + " Type " + letterType );
             android.setShort_name( String.valueOf( android.getType_number() ) + letterType );
         } else {
-            android.setName( androidCreateDTO.getName().trim() );
+            android.setName( createAndroidDTO.getName().trim() );
         }
     }
 
     /**
      * Checks if the android is an operator. If it is, an Operator will be created.
      * @param android Android created.
-     * @param androidCreateDTO Object to get the necessary data.
+     * @param createAndroidDTO Object to get the necessary data.
      */
-    private void checkType(Android android, AndroidCreateDTO androidCreateDTO){
-        if( androidCreateDTO.isOperator() ){
+    private void checkType(Android android, CreateAndroidDTO createAndroidDTO){
+        if( createAndroidDTO.isOperator() ){
             prepareOperator(android);
-        } else if( androidCreateDTO.isExecutioner() ){
+        } else if( createAndroidDTO.isExecutioner() ){
             prepareExecutioner(android);
         }
     }
