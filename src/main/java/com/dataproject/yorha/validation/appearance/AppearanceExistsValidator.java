@@ -1,16 +1,17 @@
-package com.dataproject.yorha.validation.model;
+package com.dataproject.yorha.validation.appearance;
 
-import com.dataproject.yorha.repository.ModelRepository;
+import com.dataproject.yorha.repository.AppearanceRepository;
+import com.dataproject.yorha.repository.StateRepository;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ModelExistsValidator implements ConstraintValidator<ModelExists, String> {
+public class AppearanceExistsValidator implements ConstraintValidator<AppearanceExists, String> {
 
     @Autowired
-    private ModelRepository modelRepository;
+    private AppearanceRepository appearanceRepository;
 
     @Override
     public boolean isValid(String id, ConstraintValidatorContext context){
@@ -18,6 +19,6 @@ public class ModelExistsValidator implements ConstraintValidator<ModelExists, St
             return false;
         }
 
-        return modelRepository.existsById(id);
+        return appearanceRepository.existsById(id);
     }
 }

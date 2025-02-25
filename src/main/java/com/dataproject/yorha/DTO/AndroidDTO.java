@@ -1,5 +1,6 @@
 package com.dataproject.yorha.DTO;
 
+import com.dataproject.yorha.validation.appearance.AppearanceExists;
 import com.dataproject.yorha.validation.model.ModelExists;
 import com.dataproject.yorha.validation.type.TypeExists;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -25,11 +26,9 @@ public class AndroidDTO implements Serializable {
     @TypeExists
     private String typeId;
 
-    private int type_number;
-
+    @NotBlank(message = "An Android must have an Appearance.")
+    @AppearanceExists
     private String appearanceId;
-
-    private String stateId;
 
     private String desc;
 
