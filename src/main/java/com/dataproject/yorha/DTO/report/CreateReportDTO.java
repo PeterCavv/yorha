@@ -13,7 +13,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-public class ReportCreateDTO implements Serializable {
+public class CreateReportDTO implements Serializable {
 
     @NotBlank(message = "A name needs to be given to the report.")
     @Size(max = 30, min = 10, message = "Name of the Report out of length: needs to be between 10 ~ 30")

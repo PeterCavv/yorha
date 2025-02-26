@@ -1,7 +1,7 @@
 package com.dataproject.yorha.service;
 
-import com.dataproject.yorha.DTO.report.ReportCreateDTO;
-import com.dataproject.yorha.DTO.report.ReportUpdateDTO;
+import com.dataproject.yorha.DTO.report.CreateReportDTO;
+import com.dataproject.yorha.DTO.report.UpdateReportDTO;
 import com.dataproject.yorha.model.Android;
 import com.dataproject.yorha.model.Report;
 import com.dataproject.yorha.exception.ObjectNotFoundException;
@@ -35,18 +35,18 @@ public class ReportService {
 
     /**
      * Method to create a Report.
-     * @param reportCreateDto A Report to create obtained from the view.
+     * @param createReportDto A Report to create obtained from the view.
      */
-    public Report createOneReport(ReportCreateDTO reportCreateDto) {
+    public Report createOneReport(CreateReportDTO createReportDto) {
 
         Report report = new Report();
 
-        report.setName(reportCreateDto.getName());
-        report.setContent(reportCreateDto.getContent());
-        report.setPublish_date(reportCreateDto.getPublishDate());
+        report.setName(createReportDto.getName());
+        report.setContent(createReportDto.getContent());
+        report.setPublish_date(createReportDto.getPublishDate());
 
         Android android = new Android();
-        android.setId( reportCreateDto.getAndroidId() );
+        android.setId( createReportDto.getAndroidId() );
         report.setAndroid(android);
 
         reportRepository.save(report);
@@ -59,7 +59,7 @@ public class ReportService {
      * @param reportDto A Report to create obtained from the view.
      * @param reportId Report's ID
      */
-    public Optional<Report> updateOneReport(ReportUpdateDTO reportDto, String reportId){
+    public Optional<Report> updateOneReport(UpdateReportDTO reportDto, String reportId){
 
         validateReportId(reportId);
 

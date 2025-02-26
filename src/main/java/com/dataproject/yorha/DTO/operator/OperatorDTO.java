@@ -10,18 +10,13 @@ import java.util.List;
 
 @Getter
 @Setter
-public class GetOperatorDTO implements Serializable {
+public class OperatorDTO implements Serializable {
 
     private String id;
     private String name;
-    private List<String> androids;
 
-    public GetOperatorDTO(Operator operator){
+    public OperatorDTO(Operator operator){
         this.id = operator.getId();
         this.name = operator.getName().getName();
-        if( operator.getAndroids() != null ){
-            this.androids = operator.getAndroids()
-                    .stream().map(Android::getName).toList();
-        }
     }
 }

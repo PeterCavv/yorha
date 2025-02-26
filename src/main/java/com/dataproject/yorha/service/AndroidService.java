@@ -2,6 +2,7 @@ package com.dataproject.yorha.service;
 
 import com.dataproject.yorha.DTO.android.CreateAndroidDTO;
 import com.dataproject.yorha.DTO.android.GetAndroidDTO;
+import com.dataproject.yorha.DTO.operator.GetOperatorDTO;
 import com.dataproject.yorha.model.*;
 import com.dataproject.yorha.exception.DuplicatedObjectException;
 import com.dataproject.yorha.exception.ObjectAssignedException;
@@ -46,7 +47,7 @@ public class AndroidService extends CreateAndroidDTO {
     }
 
     /**
-     * Get only availa
+     * Get only available Androids.
      * @param page
      * @param size
      * @return
@@ -308,8 +309,8 @@ public class AndroidService extends CreateAndroidDTO {
         }
 
         if( android1.getType().getName().equals("Operator") ){
-            Operator operator = operatorService.allOperator().stream()
-                    .filter(operator1 -> operator1.getName().getName().equals(android1.getName()))
+            GetOperatorDTO operator = operatorService.allOperator().stream()
+                    .filter(operator1 -> operator1.getName().equals(android1.getName()))
                     .toList().get(0);
 
             if( operator.getAndroids() != null ){
