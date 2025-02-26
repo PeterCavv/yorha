@@ -4,6 +4,7 @@ import com.dataproject.yorha.model.History;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -13,7 +14,7 @@ public class HistoryDTO {
     private String id;
     private String executioner;
     private String android;
-    private LocalDateTime date;
+    private LocalDate date;
     private String summary;
 
     public HistoryDTO(History history) {
