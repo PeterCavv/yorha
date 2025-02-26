@@ -1,5 +1,6 @@
 package com.dataproject.yorha.model;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,11 +24,7 @@ public class Type {
 
     private String desc;
 
-    public Type(String name, String resume, String desc){
-        this.name = name;
-        this.resume = resume;
-        this.desc = desc;
+    public Type(String typeId) {
+        this.id = id;
     }
-
-
 }

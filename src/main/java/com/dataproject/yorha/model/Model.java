@@ -18,4 +18,8 @@ public class Model {
     private String id;
 
     private String name;
+
+    public Model(String id){
+        this.id = id;
+    }
 }

@@ -68,37 +68,29 @@ public class AndroidService extends CreateAndroidDTO {
 
     /**
      * Method to create an Android
-     * @param createAndroidDTO Object obtained from the http post petition.
+     * @param androidDTO android object validation
+     * @return
      */
-    public Android createAndroid(CreateAndroidDTO createAndroidDTO) {
+    public Android createAndroid(CreateAndroidDTO androidDTO) {
 
         Android android = new Android();
 
-        android.setDesc(createAndroidDTO.getDesc().isBlank() ? "" : createAndroidDTO.getDesc().trim());
+        android.setDesc(androidDTO.getDesc().isBlank() ? "" : androidDTO.getDesc().trim());
 
-        Model model = new Model();
-        model.setId( createAndroidDTO.getModelId() );
-        android.setModel(model);
-
-        Type type = new Type();
-        type.setId( createAndroidDTO.getTypeId() );
-        android.setType(type);
-
-        Appearance appearance = new Appearance();
-        appearance.setId( createAndroidDTO.getAppearanceId() );
-        android.setAppearance( appearance );
-
+        android.setModel(new Model( androidDTO.getModelId() ));
+        android.setType(new Type( androidDTO.getTypeId() ));
+        android.setAppearance(new Appearance( androidDTO.getAppearanceId() ));
         android.setAssigned_operator(null);
 
-        createAndroidName(android, createAndroidDTO);
+        createAndroidName(android, androidDTO);
 
         android.setState( stateService.getAllState().stream()
-                .filter( state -> state.getName().equals("Operational") )
-                .toList().get(0) );
+                .filter( state -> state.getName().equals("Operational") ).findFirst().orElseThrow(
+                        () -> new ObjectNotFoundException("Not found an State called 'Operational'")
+                ) );
 
         Android newAndroid = androidRepository.save(android);
-
-        checkType(newAndroid, createAndroidDTO);
+        checkType(newAndroid, androidDTO);
 
         return newAndroid;
     }
@@ -111,30 +103,20 @@ public class AndroidService extends CreateAndroidDTO {
      */
     public Optional<Android> addAssignedAndroid(String idAndroid, String idOperator){
 
-        validateIdAndroid(idAndroid);
-        operatorService.validateIdOperator(idOperator);
+        Android android = validateAndroidId( idAndroid );
+        Operator operator = validateOperatorId( idOperator );
 
-        Optional<Android> android = androidRepository.findById(idAndroid);
-        Optional<Operator> operator = operatorService.findById(idOperator);
+        List<Android> androidList = operator.getAndroids();
 
-        operator.ifPresent(operator1 -> {
-                List<Android> listAndroids = operator1.getAndroids();
+        checkIfDuplicate( android, androidList, operator );
 
-                android.ifPresent(android1 -> {
+        operator.getAndroids().add(android);
+        android.setAssigned_operator(operator);
 
-                    checkIfDuplicate( android1, listAndroids, idOperator );
+        operatorService.saveOperator(operator);
+        androidRepository.save(android);
 
-                    listAndroids.add(android1);
-
-                    operator1.setAndroids(listAndroids);
-                    android1.setAssigned_operator(operator1);
-
-                    operatorService.saveOperator(operator1);
-                    androidRepository.save(android1);
-                });
-        });
-
-        return android;
+        return Optional.of(android);
     }
 
     /**
@@ -145,28 +127,19 @@ public class AndroidService extends CreateAndroidDTO {
      * @return Return an Android.
      */
     public Optional<Android> deleteAssignedAndroid( String idAndroid, String idOperator ){
-        validateIdAndroid( idAndroid );
-        operatorService.validateIdOperator( idOperator );
 
-        Optional<Android> android = androidRepository.findById(idAndroid);
-        Optional<Operator> operator = operatorService.findById(idOperator);
+        Android android = validateAndroidId( idAndroid );
+        Operator operator = validateOperatorId( idOperator );
 
-        operator.ifPresent(operator1 -> {
-            List<Android> listAndroids = operator1.getAndroids().stream()
-                    .filter( android1 -> !android1.getId().equals(idAndroid) ).toList();
+        checkIfNotAssigned(android, operator);
 
-            android.ifPresent(android1 -> {
-                checkIfNotAssigned(android1, operator1);
+        operator.getAndroids().remove(android);
+        operatorService.saveOperator(operator);
 
-                android1.setAssigned_operator(null);
-                operator1.setAndroids( listAndroids );
+        android.setAssigned_operator(null);
+        androidRepository.save(android);
 
-                operatorService.saveOperator( operator1 );
-                androidRepository.save( android1 );
-            });
-        });
-
-        return android;
+        return Optional.of(android);
     }
 
     /**
@@ -176,54 +149,34 @@ public class AndroidService extends CreateAndroidDTO {
      * @return Return an Android
      */
     public Optional<Android> executeAndroid( String idAndroid, String idExecutioner ){
-        validateIdAndroid(idAndroid);
-        executionerService.validateIdExecutioner(idExecutioner);
 
-        Optional<Android> android = androidRepository.findById(idAndroid);
-        Optional<Executioner> executioner = executionerService.findById(idExecutioner);
+        Android android = validateAndroidId( idAndroid );
 
-        android.ifPresent(android1 -> {
-            checkIfAssigned(android1);
+        Executioner executioner = validateExecutionerId( idExecutioner );
 
-            executioner.ifPresent(executioner1 -> {
-                checkAndroidBeforeExecute(android1, executioner1);
+        checkIfAssigned(android);
+        checkAndroidBeforeExecute(android, executioner);
 
-                List<History> historyList = executioner1.getHistory();
-                History element = new History();
+        History history = new History();
+        history.setAndroid(android);
+        history.setExecutioner(executioner);
 
-                element.setAndroid(android1);
-                element.setExecutioner(executioner1);
+        executioner.getHistory().add(history);
+        executionerService.saveExecutioner(executioner);
 
-                element = historyService.saveHistory(element);
-                historyList.add(element);
+        android.setState(stateService.getAllState().stream()
+                .filter(state -> state.getName().equals("Out Of Service"))
+                .findFirst().orElseThrow(
+                        () -> new ObjectNotFoundException("Not found 'Out of Service' Status.")
+                )
+        );
 
-                executioner1.setHistory(historyList);
+        androidRepository.save(android);
 
-                android1.setState( stateService.getAllState().stream()
-                        .filter( state -> state.getName().equals("Out of service") )
-                        .toList().get(0) );
-
-                executionerService.saveExecutioner( executioner1 );
-                androidRepository.save( android1 );
-            });
-        });
-
-        return android;
+        return Optional.of(android);
     }
 
     //FUNCTIONAL METHODS
-
-    /**
-     * Validate if the android ID exist.
-     * @param idAndroid Android's ID
-     */
-    private void validateIdAndroid(String idAndroid){
-        if( !androidRepository.existsById(idAndroid) ){
-            throw new ObjectNotFoundException(
-                    "Android not found with the ID: " + idAndroid );
-        }
-    }
-
 
     /**
      * Create the name that will be used by the android.
@@ -258,17 +211,54 @@ public class AndroidService extends CreateAndroidDTO {
     }
 
     /**
+     * Check if the Android exists by its ID.
+     * @param id Android's ID
+     * @return Return the Android if found
+     */
+    private Android validateAndroidId(String id){
+       return androidRepository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException(
+                        "Android not found with the ID: " + id));
+    }
+
+    /**
+     * Check if the Executioner exists by its ID.
+     * @param id Executioner's ID
+     * @return Return the Executioner if found
+     */
+    private Executioner validateExecutionerId(String id){
+        return executionerService.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException(
+                        "Executioner not found with the ID: " + id));
+    }
+
+    /**
+     * Check if the Operator exists by its ID.
+     * @param id Operator's ID
+     * @return Return the Operator if found
+     */
+    private Operator validateOperatorId(String id){
+        return operatorService.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException(
+                        "Operator not found with the ID: " + id));
+    }
+
+    /**
      * Check if the Android have already an Operator or if the Operator have that Android assigned.
      * @param android Android to check.
      * @param operatorAndroids List of the Androids assigned to the Operator.
-     * @param idOperator Operator's ID.
+     * @param operator Operator's ID.
      */
-    private void checkIfDuplicate(Android android, List<Android> operatorAndroids, String idOperator){
+    private void checkIfDuplicate(Android android, List<Android> operatorAndroids, Operator operator){
         if( android.getAssigned_operator() != null ){
-            if( operatorAndroids.contains(android) || android.getAssigned_operator().getId().equals(idOperator) ){
+
+            if( operatorAndroids.contains(android) ||
+                    android.getAssigned_operator().getId().equals(operator.getName().getId()) ){
+
                 throw new DuplicatedObjectException(
                         "Operator already have this Android assigned.");
             }
+
             throw new DuplicatedObjectException(
                     "Android is already assigned to an Operator");
         }
