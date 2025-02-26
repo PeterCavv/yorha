@@ -1,5 +1,7 @@
 package com.dataproject.yorha.controller;
 
+import com.dataproject.yorha.DTO.common.ExecutionerDTO;
+import com.dataproject.yorha.exception.ObjectNotFoundException;
 import com.dataproject.yorha.model.Executioner;
 import com.dataproject.yorha.service.ExecutionerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/executioners", produces =  MediaType.APPLICATION_JSON_VALUE)
@@ -22,18 +23,16 @@ public class ExecutionerController {
     public ExecutionerService executionerService;
 
     @GetMapping
-    public ResponseEntity<List<Executioner>> getAllExecutioner(){
+    public ResponseEntity<List<ExecutionerDTO>> getAllExecutioner(){
         return new ResponseEntity<>(executionerService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Executioner> getOneExecutioner(@PathVariable String id){
-        Optional<Executioner> executioner = executionerService.findById(id);
+    public ResponseEntity<ExecutionerDTO> getOneExecutioner(@PathVariable String id){
+        Executioner executioner = executionerService.findById(id).orElseThrow(
+                () -> new ObjectNotFoundException("Executioner not found with ID: " + id)
+        );
 
-        if(executioner.isPresent()){
-            return ResponseEntity.ok(executioner.get());
-        }
-
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok( new ExecutionerDTO(executioner) );
     }
 }

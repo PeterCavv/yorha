@@ -1,10 +1,13 @@
 package com.dataproject.yorha.service;
 
+import com.dataproject.yorha.DTO.android.GetAndroidDTO;
+import com.dataproject.yorha.DTO.operator.GetOperatorDTO;
 import com.dataproject.yorha.model.Android;
 import com.dataproject.yorha.model.Operator;
 import com.dataproject.yorha.exception.ObjectNotFoundException;
 import com.dataproject.yorha.repository.OperatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,12 +19,17 @@ public class OperatorService {
     @Autowired
     private OperatorRepository operatorRepository;
 
-    public List<Operator> allOperator() {
-        return operatorRepository.findAll();
+    public List<GetOperatorDTO> allOperator() {
+        return operatorRepository.findAll().stream().map(GetOperatorDTO::new).toList();
     }
 
-    public Optional<Operator> oneOperator(String id) {
-        return operatorRepository.findById(id);
+    /**
+     * Return an Optional Operator.
+     * @param id operator's ID.
+     * @return
+     */
+    public Optional<Operator> findById(String id) {
+        return operatorRepository.findById( id );
     }
 
     public void createOperator(Operator operator){
@@ -36,27 +44,7 @@ public class OperatorService {
     //METHODS
 
     /**
-     * Validate if the operator ID exist.
-     * @param idOperator operator's ID
-     */
-    public void validateIdOperator(String idOperator){
-        if( !operatorRepository.existsById(idOperator) ){
-            throw new ObjectNotFoundException(
-                    "Operator not found with the ID: " + idOperator );
-        }
-    }
-
-    /**
-     * Return an Optional Operator.
-     * @param idOperator operator's ID.
-     * @return
-     */
-    public Optional<Operator> findById(String idOperator) {
-        return operatorRepository.findById( idOperator );
-    }
-
-    /**
-     *
+     * Save an Operator into DB. This function is called from another service.
      * @param operator1
      */
     public void saveOperator(Operator operator1) {

@@ -1,5 +1,7 @@
 package com.dataproject.yorha.controller;
 
+import com.dataproject.yorha.DTO.operator.GetOperatorDTO;
+import com.dataproject.yorha.exception.ObjectNotFoundException;
 import com.dataproject.yorha.model.Operator;
 import com.dataproject.yorha.service.OperatorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +22,16 @@ public class OperatorController {
     private OperatorService operatorService;
 
     @GetMapping
-    public ResponseEntity<List<Operator>> getAllOperator(){
-        return new ResponseEntity<List<Operator>>(operatorService.allOperator(), HttpStatus.OK);
+    public ResponseEntity<List<GetOperatorDTO>> getAllOperator(){
+        return new ResponseEntity<>(operatorService.allOperator(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Operator>> getOneOperator(@PathVariable String id){
-        return new ResponseEntity<Optional<Operator>>(operatorService.oneOperator(id), HttpStatus.OK);
+    public ResponseEntity<GetOperatorDTO> getOneOperator(@PathVariable String id){
+        Operator operator = operatorService.findById(id).orElseThrow(
+                () -> new ObjectNotFoundException("Operator not found with ID: " + id)
+        );
+
+        return ResponseEntity.ok(new GetOperatorDTO(operator));
     }
 }

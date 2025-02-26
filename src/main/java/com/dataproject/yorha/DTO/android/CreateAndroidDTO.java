@@ -13,7 +13,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-public class AndroidDTO implements Serializable {
+public class CreateAndroidDTO implements Serializable {
 
     @Size(max = 35, message = "Android's name out of length: max length = 25")
     private String name;

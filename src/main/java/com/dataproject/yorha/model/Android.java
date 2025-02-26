@@ -9,6 +9,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.*;
 
+import java.util.Objects;
+
 @Document(collection = "androids")
 @AllArgsConstructor
 @NoArgsConstructor
@@ -60,6 +62,18 @@ public class Android {
         this.appearance = appearance;
         this.state = state;
         this.desc = desc;
+    }
+
+    public Android(String id){
+        this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object obj){
+        if( this == obj) return true;
+        if( obj == null || getClass() != obj.getClass()) return false;
+        Android android = (Android) obj;
+        return Objects.equals(id, android.id);
     }
 
 }

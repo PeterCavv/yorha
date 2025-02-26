@@ -1,6 +1,5 @@
 package com.dataproject.yorha.DTO.report;
 
-import com.dataproject.yorha.validation.android.AndroidExists;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,7 +12,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-public class ReportUpdateDTO implements Serializable {
+public class UpdateReportDTO implements Serializable {
 
     @NotBlank(message = "A name needs to be given to the report.")
     @Size(max = 30, min = 10, message = "Name of the Report out of length: needs to be between 10 ~ 30")

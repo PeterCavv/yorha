@@ -1,7 +1,9 @@
 package com.dataproject.yorha.controller;
 
-import com.dataproject.yorha.DTO.report.ReportCreateDTO;
-import com.dataproject.yorha.DTO.report.ReportUpdateDTO;
+import com.dataproject.yorha.DTO.report.CreateReportDTO;
+import com.dataproject.yorha.DTO.report.GetReportDTO;
+import com.dataproject.yorha.DTO.report.UpdateReportDTO;
+import com.dataproject.yorha.exception.ObjectNotFoundException;
 import com.dataproject.yorha.model.Report;
 import com.dataproject.yorha.service.ReportService;
 import jakarta.validation.Valid;
@@ -23,32 +25,32 @@ public class ReportController {
         private ReportService reportService;
 
         @GetMapping
-        public ResponseEntity<List<Report>> getAllAndroids(){
-            return new ResponseEntity<List<Report>>(reportService.allReports(), HttpStatus.OK);
+        public ResponseEntity<List<GetReportDTO>> getAllReports(){
+            return new ResponseEntity<>(reportService.allReports(), HttpStatus.OK);
         }
 
         @GetMapping("/{id}")
-        public ResponseEntity<Report> getOneReport(@PathVariable String id){
-            Optional<Report> report = reportService.findById(id);
+        public ResponseEntity<GetReportDTO> getOneReport(@PathVariable String id){
+            Report report = reportService.findById(id).orElseThrow(
+                    () -> new ObjectNotFoundException("Operator not found with ID: " + id)
+            );
 
-            if( report.isPresent() ){
-                return ResponseEntity.ok(report.get());
-            }
+            GetReportDTO dto = new GetReportDTO(report);
 
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.ok(dto);
         }
 
         @PostMapping
-        public ResponseEntity<Report> createOneReport(@Valid @RequestBody ReportCreateDTO reportDto){
+        public ResponseEntity<Report> createOneReport(@Valid @RequestBody CreateReportDTO reportDto){
 
             Report report = reportService.createOneReport(reportDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(report);
         }
 
         @PutMapping("/{id}")
-        public ResponseEntity<Optional<Report>> updateOneReport(@PathVariable("id") String reportId,
-                                                                @Valid @RequestBody ReportUpdateDTO reportDto){
-
+        public ResponseEntity<Optional<Report>> updateOneReport(
+                @PathVariable("id") String reportId,
+                @Valid @RequestBody UpdateReportDTO reportDto){
 
             Optional<Report> report = reportService.updateOneReport(reportDto, reportId);
             return ResponseEntity.status(HttpStatus.OK).body(report);

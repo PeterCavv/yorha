@@ -1,8 +1,7 @@
 package com.dataproject.yorha.service;
 
+import com.dataproject.yorha.DTO.common.ExecutionerDTO;
 import com.dataproject.yorha.model.Executioner;
-import com.dataproject.yorha.model.History;
-import com.dataproject.yorha.exception.ObjectNotFoundException;
 import com.dataproject.yorha.repository.ArmoryRepository;
 import com.dataproject.yorha.repository.ExecutionerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +20,18 @@ public class ExecutionerService {
     @Autowired
     public ArmoryRepository armoryRepository;
 
-    public List<Executioner> findAll(){ return executionerRepository.findAll(); }
+    public List<ExecutionerDTO> findAll(){
+        return executionerRepository.findAll().stream()
+                .map(ExecutionerDTO::new).toList();
+    }
 
-    public Optional<Executioner> findById(String id){ return executionerRepository.findById(id); }
+    public Optional<Executioner> findById(String id){
+        return executionerRepository.findById(id);
+    }
 
     public void createExecutioner( Executioner executioner ){
 
-        List<History> historyList = new ArrayList<>();
-        executioner.setHistory(historyList);
+        executioner.setHistory(new ArrayList<>());
         executioner.setEquipment(armoryRepository.findAll().stream()
                 .filter(weapon -> weapon.getName()
                         .equals("YoRHa-issue Blade"))
@@ -40,18 +43,7 @@ public class ExecutionerService {
     //METHODS
 
     /**
-     * Validate if the Executioner actually exists.
-     * @param idExecutioner executioner's ID.
-     */
-    public void validateIdExecutioner( String idExecutioner ) {
-        if( !executionerRepository.existsById(idExecutioner) ){
-            throw new ObjectNotFoundException(
-                    "Executioner not found with the ID: " + idExecutioner );
-        }
-    }
-
-    /**
-     * Save the Executioner into DB.
+     * Save the Executioner into DB. This function is called from another service.
      * @param executioner executioner to save.
      */
     public void saveExecutioner( Executioner executioner ){

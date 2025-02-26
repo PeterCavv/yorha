@@ -1,6 +1,8 @@
 package com.dataproject.yorha.controller;
 
-import com.dataproject.yorha.DTO.android.AndroidDTO;
+import com.dataproject.yorha.DTO.android.CreateAndroidDTO;
+import com.dataproject.yorha.DTO.android.GetAndroidDTO;
+import com.dataproject.yorha.exception.ObjectNotFoundException;
 import com.dataproject.yorha.model.*;
 import com.dataproject.yorha.service.AndroidService;
 import jakarta.validation.Valid;
@@ -31,8 +33,8 @@ public class AndroidController {
      * @return
      */
     @GetMapping
-    public ResponseEntity<List<Android>> getAllAndroids(){
-        return new ResponseEntity<List<Android>>(androidService.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<GetAndroidDTO>> getAllAndroids(){
+        return new ResponseEntity<>(androidService.findAll(), HttpStatus.OK);
     }
 
     /**
@@ -41,18 +43,16 @@ public class AndroidController {
      * @return
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Android> getOneAndroid(@PathVariable String id){
-        Optional<Android> android = androidService.findById(id);
+    public ResponseEntity<GetAndroidDTO> getOneAndroid(@PathVariable String id){
+        Android android = androidService.findById(id).orElseThrow(
+                () -> new ObjectNotFoundException("Android not found with ID: " + id)
+        );
 
-        //Check if the ID exist.
-        if(android.isPresent()){
-            return ResponseEntity.ok(android.get());
-        }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok( new GetAndroidDTO(android) );
     }
 
     @GetMapping("/available")
-    public ResponseEntity<List<Android>> getAllAvailableAndroids(){
+    public ResponseEntity<List<GetAndroidDTO>> getAllAvailableAndroids(){
         return new ResponseEntity<>(androidService.findAllAvailable(), HttpStatus.OK);
     }
 
@@ -62,14 +62,14 @@ public class AndroidController {
 
     /**
      * Method to create an Android.
-     * @param androidDto Android to create obtained from the http request.
+     * @param createAndroidDto Android to create obtained from the http request.
      * @return
      */
     @PostMapping
-    public ResponseEntity<Android> createOneAndroid(@Valid @RequestBody AndroidDTO androidDto)
+    public ResponseEntity<Android> createOneAndroid(@Valid @RequestBody CreateAndroidDTO createAndroidDto)
     {
         //Here will be created and saved the Android.
-        Android android = androidService.createAndroid(androidDto);
+        Android android = androidService.createAndroid(createAndroidDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(android);
 
     }

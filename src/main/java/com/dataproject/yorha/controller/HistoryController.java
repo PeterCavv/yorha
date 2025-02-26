@@ -1,5 +1,7 @@
 package com.dataproject.yorha.controller;
 
+import com.dataproject.yorha.DTO.common.HistoryDTO;
+import com.dataproject.yorha.exception.ObjectNotFoundException;
 import com.dataproject.yorha.model.History;
 import com.dataproject.yorha.service.HistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/histories", produces =  MediaType.APPLICATION_JSON_VALUE)
@@ -27,14 +28,12 @@ public class HistoryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<History> getOneHistory(@PathVariable String id){
+    public ResponseEntity<HistoryDTO> getOneHistory(@PathVariable String id){
 
-        Optional<History> history = historyService.findById(id);
+        History history = historyService.findById(id).orElseThrow(
+                () -> new ObjectNotFoundException("History not found with ID: " + id)
+        );
 
-        //Check if the ID exist.
-            if(history.isPresent()){
-            return ResponseEntity.ok(history.get());
-        }
-            return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(new HistoryDTO(history));
     }
 }

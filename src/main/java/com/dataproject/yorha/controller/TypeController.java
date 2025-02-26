@@ -1,12 +1,10 @@
 package com.dataproject.yorha.controller;
 
-import com.dataproject.yorha.DTO.TypeDTO;
 import com.dataproject.yorha.model.Type;
 import com.dataproject.yorha.service.TypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,18 +23,18 @@ public class TypeController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Optional<Type>> getOneType(@PathVariable String id){
-        return new ResponseEntity<Optional<Type>>(typeService.oneType(id), HttpStatus.OK);
+        return new ResponseEntity<>(typeService.oneType(id), HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<Type> postType(@RequestBody @Validated TypeDTO typeDTO) {
-        Type type = typeService.createType(typeDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(type );
-    }
+//    @PostMapping
+//    public ResponseEntity<Type> postType(@RequestBody @Validated TypeDTO typeDTO) {
+//        Type type = typeService.createType(typeDTO);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(type );
+//    }
 
-    @DeleteMapping(value = "/delete/{name}")
-    public ResponseEntity<HttpStatus> deleteType(@PathVariable String name){
-        typeService.delete(name);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
+//    @DeleteMapping(value = "/delete/{name}")
+//    public ResponseEntity<HttpStatus> deleteType(@PathVariable String name){
+//        typeService.delete(name);
+//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//    }
 }

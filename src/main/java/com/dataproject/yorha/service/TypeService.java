@@ -1,6 +1,5 @@
 package com.dataproject.yorha.service;
 
-import com.dataproject.yorha.DTO.TypeDTO;
 import com.dataproject.yorha.model.Type;
 import com.dataproject.yorha.exception.ObjectNotFoundException;
 import com.dataproject.yorha.repository.TypeRepository;
@@ -23,18 +22,18 @@ public class TypeService {
         return typeRepository.findById(id);
     }
 
-    public Type createType(TypeDTO typeDTO){
-        Type type = new Type();
-        type.setName(typeDTO.getName());
-        type.setDesc(typeDTO.getDesc());
-        if(!typeDTO.getResume().isEmpty() && !typeDTO.getResume().isBlank()){
-            type.setResume(typeDTO.getResume());
-        } else {
-            type.setResume("");
-        }
-
-        return typeRepository.save(type);
-    }
+//    public Type createType(TypeDTO typeDTO){
+//        Type type = new Type();
+//        type.setName(typeDTO.getName());
+//        type.setDesc(typeDTO.getDesc());
+//        if(!typeDTO.getResume().isEmpty() && !typeDTO.getResume().isBlank()){
+//            type.setResume(typeDTO.getResume());
+//        } else {
+//            type.setResume("");
+//        }
+//
+//        return typeRepository.save(type);
+//    }
 
     public void delete(String name){
         typeRepository.deleteByName(name);

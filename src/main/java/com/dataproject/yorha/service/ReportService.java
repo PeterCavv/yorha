@@ -1,12 +1,15 @@
 package com.dataproject.yorha.service;
 
-import com.dataproject.yorha.DTO.report.ReportCreateDTO;
-import com.dataproject.yorha.DTO.report.ReportUpdateDTO;
+import com.dataproject.yorha.DTO.report.CreateReportDTO;
+import com.dataproject.yorha.DTO.report.GetReportDTO;
+import com.dataproject.yorha.DTO.report.UpdateReportDTO;
 import com.dataproject.yorha.model.Android;
 import com.dataproject.yorha.model.Report;
 import com.dataproject.yorha.exception.ObjectNotFoundException;
 import com.dataproject.yorha.repository.ReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,8 +24,8 @@ public class ReportService {
     /**
      * Method to find all the Reports created.
      */
-    public List<Report> allReports() {
-        return reportRepository.findAll();
+    public List<GetReportDTO> allReports() {
+        return reportRepository.findAll().stream().map(GetReportDTO::new).toList();
     }
 
     /**
@@ -35,19 +38,17 @@ public class ReportService {
 
     /**
      * Method to create a Report.
-     * @param reportCreateDto A Report to create obtained from the view.
+     * @param createReportDto A Report to create obtained from the view.
      */
-    public Report createOneReport(ReportCreateDTO reportCreateDto) {
+    public Report createOneReport(CreateReportDTO createReportDto) {
 
         Report report = new Report();
 
-        report.setName(reportCreateDto.getName());
-        report.setContent(reportCreateDto.getContent());
-        report.setPublish_date(reportCreateDto.getPublishDate());
+        report.setName(createReportDto.getName());
+        report.setContent(createReportDto.getContent());
+        report.setPublish_date(createReportDto.getPublishDate());
 
-        Android android = new Android();
-        android.setId( reportCreateDto.getAndroidId() );
-        report.setAndroid(android);
+        report.setAndroid( new Android(createReportDto.getAndroidId()) );
 
         reportRepository.save(report);
 
@@ -59,43 +60,32 @@ public class ReportService {
      * @param reportDto A Report to create obtained from the view.
      * @param reportId Report's ID
      */
-    public Optional<Report> updateOneReport(ReportUpdateDTO reportDto, String reportId){
+    public Optional<Report> updateOneReport(UpdateReportDTO reportDto, String reportId){
 
-        validateReportId(reportId);
+        Report report = reportRepository.findById(reportId).orElseThrow(
+                () -> new ObjectNotFoundException("Report not found with ID: " + reportId)
+        );
 
-        Optional<Report> report = reportRepository.findById(reportId);
+        report.setName(reportDto.getName());
+        report.setContent(reportDto.getContent());
+        report.setPublish_date(reportDto.getPublishDate());
 
-        report.ifPresent(rep -> {
-            rep.setName(reportDto.getName());
-            rep.setContent(reportDto.getContent());
-            rep.setPublish_date(reportDto.getPublishDate());
+        reportRepository.save(report);
 
-            reportRepository.save(rep);
-        });
-
-        return report;
-    }
-
-    public void deleteOneReport(String id){
-
-        validateReportId(id);
-
-        Optional<Report> report = reportRepository.findById(id);
-
-        report.ifPresent(rep -> {
-            reportRepository.delete(rep);
-        });
+        return Optional.of(report);
     }
 
     /**
-     * Validate if the report exists.
-     * @param reportId Report's ID.
+     * Remove one report from DB.
+     * @param id Report's ID
      */
-    private void validateReportId(String reportId){
-        if( !reportRepository.existsById(reportId) ){
-            throw new ObjectNotFoundException("Report not found with ID: " + reportId);
-        }
-    }
+    public void deleteOneReport(String id){
 
+        Report report = reportRepository.findById(id).orElseThrow(
+                () -> new ObjectNotFoundException("Report not found with ID: " + id)
+        );
+
+        reportRepository.save(report);
+    }
 
 }
