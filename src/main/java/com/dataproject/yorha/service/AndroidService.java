@@ -9,9 +9,9 @@ import com.dataproject.yorha.exception.ObjectAssignedException;
 import com.dataproject.yorha.exception.ObjectNotFoundException;
 import com.dataproject.yorha.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 import java.util.List;
 import java.util.Optional;
@@ -151,11 +151,7 @@ public class AndroidService extends CreateAndroidDTO {
         checkIfAssigned(android);
         checkAndroidBeforeExecute(android, executioner);
 
-        History history = new History();
-        history.setAndroid(android);
-        history.setExecutioner(executioner);
-
-        executioner.getHistory().add(history);
+        executioner.getHistory().add(new History(android, executioner, LocalDate.now()));
         executionerService.saveExecutioner(executioner);
 
         android.setState(stateService.getAllState().stream()

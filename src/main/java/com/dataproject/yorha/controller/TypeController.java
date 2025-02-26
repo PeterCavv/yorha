@@ -23,7 +23,7 @@ public class TypeController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Optional<Type>> getOneType(@PathVariable String id){
-        return new ResponseEntity<Optional<Type>>(typeService.oneType(id), HttpStatus.OK);
+        return new ResponseEntity<>(typeService.oneType(id), HttpStatus.OK);
     }
 
 //    @PostMapping
@@ -32,9 +32,9 @@ public class TypeController {
 //        return ResponseEntity.status(HttpStatus.CREATED).body(type );
 //    }
 
-    @DeleteMapping(value = "/delete/{name}")
-    public ResponseEntity<HttpStatus> deleteType(@PathVariable String name){
-        typeService.delete(name);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
+//    @DeleteMapping(value = "/delete/{name}")
+//    public ResponseEntity<HttpStatus> deleteType(@PathVariable String name){
+//        typeService.delete(name);
+//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//    }
 }

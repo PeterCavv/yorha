@@ -1,4 +1,4 @@
-package com.dataproject.yorha.DTO.executioner;
+package com.dataproject.yorha.DTO.common;
 
 import com.dataproject.yorha.model.Executioner;
 import lombok.Getter;
@@ -8,14 +8,14 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-public class GetExecutionerDTO implements Serializable {
+public class ExecutionerDTO implements Serializable {
 
     private String id;
     private String name;
     private String equipment;
 //    private GetHistoryDTO histories;
 
-    public GetExecutionerDTO(Executioner executioner){
+    public ExecutionerDTO(Executioner executioner){
         this.id = executioner.getId();
         this.name = executioner.getName().getName();
         this.equipment = executioner.getEquipment().getName();

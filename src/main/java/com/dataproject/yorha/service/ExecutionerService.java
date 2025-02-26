@@ -1,9 +1,7 @@
 package com.dataproject.yorha.service;
 
-import com.dataproject.yorha.DTO.executioner.GetExecutionerDTO;
+import com.dataproject.yorha.DTO.common.ExecutionerDTO;
 import com.dataproject.yorha.model.Executioner;
-import com.dataproject.yorha.model.History;
-import com.dataproject.yorha.exception.ObjectNotFoundException;
 import com.dataproject.yorha.repository.ArmoryRepository;
 import com.dataproject.yorha.repository.ExecutionerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +20,9 @@ public class ExecutionerService {
     @Autowired
     public ArmoryRepository armoryRepository;
 
-    public List<GetExecutionerDTO> findAll(){
+    public List<ExecutionerDTO> findAll(){
         return executionerRepository.findAll().stream()
-                .map(GetExecutionerDTO::new).toList();
+                .map(ExecutionerDTO::new).toList();
     }
 
     public Optional<Executioner> findById(String id){

@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Document(collection = "histories")
 @Data
@@ -37,7 +37,13 @@ public class History{
 
     @CreatedDate
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
-    private LocalDateTime date;
+    private LocalDate date;
 
     private String summary;
+
+    public History(Android android, Executioner executioner, LocalDate now) {
+        this.android = android;
+        this.executioner = executioner;
+        this.date = now;
+    }
 }

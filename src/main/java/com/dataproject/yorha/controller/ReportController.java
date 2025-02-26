@@ -48,9 +48,9 @@ public class ReportController {
         }
 
         @PutMapping("/{id}")
-        public ResponseEntity<Optional<Report>> updateOneReport(@PathVariable("id") String reportId,
-                                                                @Valid @RequestBody UpdateReportDTO reportDto){
-
+        public ResponseEntity<Optional<Report>> updateOneReport(
+                @PathVariable("id") String reportId,
+                @Valid @RequestBody UpdateReportDTO reportDto){
 
             Optional<Report> report = reportService.updateOneReport(reportDto, reportId);
             return ResponseEntity.status(HttpStatus.OK).body(report);

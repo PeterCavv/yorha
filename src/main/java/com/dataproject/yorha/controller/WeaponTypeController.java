@@ -1,5 +1,6 @@
 package com.dataproject.yorha.controller;
 
+import com.dataproject.yorha.exception.ObjectNotFoundException;
 import com.dataproject.yorha.model.WeaponType;
 import com.dataproject.yorha.service.WeaponTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +28,10 @@ public class WeaponTypeController {
 
     @GetMapping("/{id}")
     public ResponseEntity<WeaponType> getOneWeaponType(@PathVariable String id){
-        Optional<WeaponType> weaponType = weaponTypeService.findById(id);
+        WeaponType weaponType = weaponTypeService.findById(id).orElseThrow(
+                () -> new ObjectNotFoundException("Weapon Type not found with ID: " + id)
+        );
 
-        if(weaponType.isPresent()){
-            return ResponseEntity.ok(weaponType.get());
-        }
-
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(weaponType);
     }
 }

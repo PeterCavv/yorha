@@ -1,4 +1,4 @@
-package com.dataproject.yorha.DTO.history;
+package com.dataproject.yorha.DTO.common;
 
 import com.dataproject.yorha.model.History;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class GetHistoryDTO {
+public class HistoryDTO {
 
     private String id;
     private String executioner;
@@ -16,7 +16,7 @@ public class GetHistoryDTO {
     private LocalDateTime date;
     private String summary;
 
-    public GetHistoryDTO(History history) {
+    public HistoryDTO(History history) {
         this.id = history.getId();
         this.executioner = history.getExecutioner().getName().getName();
         this.android = history.getAndroid().getName();
