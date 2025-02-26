@@ -31,11 +31,11 @@ public class ReportController {
 
         @GetMapping("/{id}")
         public ResponseEntity<GetReportDTO> getOneReport(@PathVariable String id){
-            Optional<Report> report = Optional.of(reportService.findById(id).orElseThrow(
+            Report report = reportService.findById(id).orElseThrow(
                     () -> new ObjectNotFoundException("Operator not found with ID: " + id)
-            ));
+            );
 
-            GetReportDTO dto = new GetReportDTO(report.get());
+            GetReportDTO dto = new GetReportDTO(report);
 
             return ResponseEntity.ok(dto);
         }

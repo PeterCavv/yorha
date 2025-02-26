@@ -44,11 +44,11 @@ public class AndroidController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<GetAndroidDTO> getOneAndroid(@PathVariable String id){
-        Optional<Android> android = Optional.of(androidService.findById(id).orElseThrow(
+        Android android = androidService.findById(id).orElseThrow(
                 () -> new ObjectNotFoundException("Android not found with ID: " + id)
-        ));
+        );
 
-        GetAndroidDTO dto = new GetAndroidDTO(android.get());
+        GetAndroidDTO dto = new GetAndroidDTO(android);
 
         return ResponseEntity.ok(dto);
     }
