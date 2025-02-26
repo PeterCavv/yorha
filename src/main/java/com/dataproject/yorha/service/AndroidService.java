@@ -36,24 +36,18 @@ public class AndroidService extends CreateAndroidDTO {
 
     /**
      * Get all Androids.
-     * @param page
-     * @param size
      * @return
      */
-    public List<GetAndroidDTO> findAll(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return androidRepository.findAllAndroids(pageable)
+    public List<GetAndroidDTO> findAll() {
+        return androidRepository.findAll()
                 .stream().map(GetAndroidDTO::new).toList();
     }
 
     /**
      * Get only available Androids.
-     * @param page
-     * @param size
      * @return
      */
-    public List<GetAndroidDTO> findAllAvailable(int page, int size){
-        Pageable pageable = PageRequest.of(page, size);
+    public List<GetAndroidDTO> findAllAvailable(){
         return androidRepository.findAll().stream()
         .filter(android -> android.getAssigned_operator() == null
                         && !android.getState().getName().equals("Out of service")

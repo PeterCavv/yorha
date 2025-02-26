@@ -2,6 +2,7 @@ package com.dataproject.yorha.controller;
 
 import com.dataproject.yorha.DTO.android.CreateAndroidDTO;
 import com.dataproject.yorha.DTO.android.GetAndroidDTO;
+import com.dataproject.yorha.exception.ObjectNotFoundException;
 import com.dataproject.yorha.model.*;
 import com.dataproject.yorha.service.AndroidService;
 import jakarta.validation.Valid;
@@ -32,11 +33,8 @@ public class AndroidController {
      * @return
      */
     @GetMapping
-    public ResponseEntity<List<GetAndroidDTO>> getAllAndroids(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size
-    ){
-        return new ResponseEntity<>(androidService.findAll(page, size), HttpStatus.OK);
+    public ResponseEntity<List<GetAndroidDTO>> getAllAndroids(){
+        return new ResponseEntity<>(androidService.findAll(), HttpStatus.OK);
     }
 
     /**
@@ -45,22 +43,19 @@ public class AndroidController {
      * @return
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Android> getOneAndroid(@PathVariable String id){
-        Optional<Android> android = androidService.findById(id);
+    public ResponseEntity<GetAndroidDTO> getOneAndroid(@PathVariable String id){
+        Optional<Android> android = Optional.of(androidService.findById(id).orElseThrow(
+                () -> new ObjectNotFoundException("Android not found with ID: " + id)
+        ));
 
-        //Check if the ID exist.
-        if(android.isPresent()){
-            return ResponseEntity.ok(android.get());
-        }
-        return ResponseEntity.notFound().build();
+        GetAndroidDTO dto = new GetAndroidDTO(android.get());
+
+        return ResponseEntity.ok(dto);
     }
 
     @GetMapping("/available")
-    public ResponseEntity<List<GetAndroidDTO>> getAllAvailableAndroids(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size
-    ){
-        return new ResponseEntity<>(androidService.findAllAvailable(page, size), HttpStatus.OK);
+    public ResponseEntity<List<GetAndroidDTO>> getAllAvailableAndroids(){
+        return new ResponseEntity<>(androidService.findAllAvailable(), HttpStatus.OK);
     }
 
     //-------------------------------------------------------------------------------------------------
