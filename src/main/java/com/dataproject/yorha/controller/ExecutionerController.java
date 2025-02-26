@@ -1,5 +1,7 @@
 package com.dataproject.yorha.controller;
 
+import com.dataproject.yorha.DTO.executioner.GetExecutionerDTO;
+import com.dataproject.yorha.exception.ObjectNotFoundException;
 import com.dataproject.yorha.model.Executioner;
 import com.dataproject.yorha.service.ExecutionerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,18 +24,16 @@ public class ExecutionerController {
     public ExecutionerService executionerService;
 
     @GetMapping
-    public ResponseEntity<List<Executioner>> getAllExecutioner(){
+    public ResponseEntity<List<GetExecutionerDTO>> getAllExecutioner(){
         return new ResponseEntity<>(executionerService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Executioner> getOneExecutioner(@PathVariable String id){
-        Optional<Executioner> executioner = executionerService.findById(id);
+    public ResponseEntity<GetExecutionerDTO> getOneExecutioner(@PathVariable String id){
+        Executioner executioner = executionerService.findById(id).orElseThrow(
+                () -> new ObjectNotFoundException("Executioner not found with ID: " + id)
+        );
 
-        if(executioner.isPresent()){
-            return ResponseEntity.ok(executioner.get());
-        }
-
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok( new GetExecutionerDTO(executioner) );
     }
 }

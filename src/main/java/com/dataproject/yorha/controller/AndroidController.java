@@ -48,9 +48,7 @@ public class AndroidController {
                 () -> new ObjectNotFoundException("Android not found with ID: " + id)
         );
 
-        GetAndroidDTO dto = new GetAndroidDTO(android);
-
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.ok( new GetAndroidDTO(android) );
     }
 
     @GetMapping("/available")
