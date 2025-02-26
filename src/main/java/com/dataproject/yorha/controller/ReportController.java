@@ -1,7 +1,9 @@
 package com.dataproject.yorha.controller;
 
 import com.dataproject.yorha.DTO.report.CreateReportDTO;
+import com.dataproject.yorha.DTO.report.GetReportDTO;
 import com.dataproject.yorha.DTO.report.UpdateReportDTO;
+import com.dataproject.yorha.exception.ObjectNotFoundException;
 import com.dataproject.yorha.model.Report;
 import com.dataproject.yorha.service.ReportService;
 import jakarta.validation.Valid;
@@ -23,19 +25,19 @@ public class ReportController {
         private ReportService reportService;
 
         @GetMapping
-        public ResponseEntity<List<Report>> getAllAndroids(){
-            return new ResponseEntity<List<Report>>(reportService.allReports(), HttpStatus.OK);
+        public ResponseEntity<List<GetReportDTO>> getAllReports(){
+            return new ResponseEntity<>(reportService.allReports(), HttpStatus.OK);
         }
 
         @GetMapping("/{id}")
-        public ResponseEntity<Report> getOneReport(@PathVariable String id){
-            Optional<Report> report = reportService.findById(id);
+        public ResponseEntity<GetReportDTO> getOneReport(@PathVariable String id){
+            Optional<Report> report = Optional.of(reportService.findById(id).orElseThrow(
+                    () -> new ObjectNotFoundException("Operator not found with ID: " + id)
+            ));
 
-            if( report.isPresent() ){
-                return ResponseEntity.ok(report.get());
-            }
+            GetReportDTO dto = new GetReportDTO(report.get());
 
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.ok(dto);
         }
 
         @PostMapping
