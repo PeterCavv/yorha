@@ -64,6 +64,10 @@ public class Android {
         this.desc = desc;
     }
 
+    public Android(String id){
+        this.id = id;
+    }
+
     @Override
     public boolean equals(Object obj){
         if( this == obj) return true;
