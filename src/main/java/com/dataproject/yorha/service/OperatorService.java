@@ -23,8 +23,13 @@ public class OperatorService {
         return operatorRepository.findAll().stream().map(GetOperatorDTO::new).toList();
     }
 
-    public Optional<Operator> oneOperator(String id) {
-        return operatorRepository.findById(id);
+    /**
+     * Return an Optional Operator.
+     * @param id operator's ID.
+     * @return
+     */
+    public Optional<Operator> findById(String id) {
+        return operatorRepository.findById( id );
     }
 
     public void createOperator(Operator operator){
@@ -39,16 +44,7 @@ public class OperatorService {
     //METHODS
 
     /**
-     * Return an Optional Operator.
-     * @param idOperator operator's ID.
-     * @return
-     */
-    public Optional<Operator> findById(String idOperator) {
-        return operatorRepository.findById( idOperator );
-    }
-
-    /**
-     *
+     * Save an Operator into DB. This function is called from another service.
      * @param operator1
      */
     public void saveOperator(Operator operator1) {
