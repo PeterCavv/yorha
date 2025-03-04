@@ -1,7 +1,6 @@
 package com.dataproject.yorha.DTO.report;
 
 import com.dataproject.yorha.model.Report;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
