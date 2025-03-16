@@ -29,6 +29,8 @@ public class AndroidService extends CreateAndroidDTO {
     @Autowired
     private StateService stateService;
     @Autowired
+    private ModelService modelService;
+    @Autowired
     private TypeService typeService;
     @Autowired
     private HistoryService historyService;
@@ -62,21 +64,21 @@ public class AndroidService extends CreateAndroidDTO {
 
     /**
      * Method to create an Android
-     * @param androidDTO android object validation
+     * @param createAndroidDTO android object validation
      * @return
      */
-    public Android createAndroid(CreateAndroidDTO androidDTO) {
+    public Android createAndroid(CreateAndroidDTO createAndroidDTO) {
 
         Android android = new Android();
 
-        android.setDesc(androidDTO.getDesc().isBlank() ? "" : androidDTO.getDesc().trim());
+        android.setDesc(createAndroidDTO.getDesc().isBlank() ? "" : createAndroidDTO.getDesc().trim());
 
-        android.setModel(new Model( androidDTO.getModelId() ));
-        android.setType(new Type( androidDTO.getTypeId() ));
-        android.setAppearance(new Appearance( androidDTO.getAppearanceId() ));
+        android.setModel(new Model( createAndroidDTO.getModelId() ));
+        android.setType(new Type( createAndroidDTO.getTypeId() ));
+        android.setAppearance(new Appearance( createAndroidDTO.getAppearanceId() ));
         android.setAssigned_operator(null);
 
-        createAndroidName(android, androidDTO);
+        createAndroidName(android, createAndroidDTO);
 
         android.setState( stateService.getAllState().stream()
                 .filter( state -> state.getName().equals("Operational") ).findFirst().orElseThrow(
@@ -84,7 +86,7 @@ public class AndroidService extends CreateAndroidDTO {
                 ) );
 
         Android newAndroid = androidRepository.save(android);
-        checkType(newAndroid, androidDTO);
+        checkType(newAndroid, createAndroidDTO);
 
         return newAndroid;
     }
@@ -174,16 +176,28 @@ public class AndroidService extends CreateAndroidDTO {
      * @param createAndroidDTO Object to get the necessary data.
      */
     private void createAndroidName(Android android, CreateAndroidDTO createAndroidDTO){
-        if( createAndroidDTO.getName().isBlank() ) {
+        Model modelId = modelService.getAllModels().stream()
+                .filter(model -> model.getName().equals("YoRHa"))
+                .findFirst().orElseThrow(
+                        () -> new ObjectNotFoundException("Not found 'YoRHa' Model.")
+                );
+
+        if( createAndroidDTO.getModelId().equals( modelId.getId() ) ) {
             char letterType = typeService.allTypes().stream()
                     .filter( type1 -> type1.getId().equals(android.getType().getId()) )
                     .toList().get(0).getName().charAt(0);
 
+            int typeNumber = (int) androidRepository.countByType( android.getType() ) + 1;
+            android.setType_number(typeNumber);
             android.setName( "YoRHa No." + android.getType_number()
                     + " Type " + letterType );
             android.setShort_name( String.valueOf( android.getType_number() ) + letterType );
-        } else {
+
+        } else if( !createAndroidDTO.getName().isBlank() ){
             android.setName( createAndroidDTO.getName().trim() );
+
+        } else {
+            throw new IllegalArgumentException("Special Androids needs a name ");
         }
     }
 
