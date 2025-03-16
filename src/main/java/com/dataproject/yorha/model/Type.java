@@ -24,7 +24,7 @@ public class Type {
 
     private String desc;
 
-    public Type(String typeId) {
+    public Type(String id) {
         this.id = id;
     }
 }

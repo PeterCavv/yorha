@@ -22,7 +22,7 @@ public class Appearance {
 
     private String name;
 
-    public Appearance(String appearanceId) {
+    public Appearance(String id) {
         this.id = id;
     }
 }
